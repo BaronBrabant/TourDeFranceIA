@@ -1,8 +1,15 @@
 
 #mapDiv {
+    position:relative;
     float:left;
     width: 50%;
     border-width: 20;
+    background-image: url("../img/gameBoard.png");
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-position: center;
+    background-color: rgb(215, 215, 215);
+    
 }
 
 #father {
@@ -50,3 +57,16 @@
     height:35%;
     width: 100%;
 }
+
+
+.superposeMap {
+    width:100%;
+    z-index: 1;
+}
+
+.superpose {
+    position: absolute;
+    z-index: 1;
+}
+
+

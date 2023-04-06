@@ -5,9 +5,25 @@
 
 <div id="mapDiv">
 
-    <img id="map" src="../static/img/gameBoard.png" alt="map" class="img-fluid" usemap="#map">
+    <img id="map" src="../static/img/gameBoard.png" alt="map" class="superposeMap" usemap="#map">
+
+    <img id="cyclist" class="superpose" src="../static/img/cyclist.png" style="width:100px">
 
 </div>
+
+<script>
+
+    window.onload = function() {
+       
+        let positonX = positon1[0][0]*document.getElementById("mapDiv").clientWidth
+        let positonY = positon1[0][1]*document.getElementById("mapDiv").clientHeight
+
+        document.getElementById("cyclist").style.top = "500px";
+        document.getElementById("cyclist").style.left = positonY;
+
+    }
+
+</script>
 
 {% endblock %}
 

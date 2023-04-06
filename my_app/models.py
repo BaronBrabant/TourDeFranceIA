@@ -2,6 +2,8 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from .database import db
 
+ratioPosition= [[0.31171875, 0.44589774078478], [0.3359375, 0.4423305588585018], [0.359375, 0.4423305588585018]]
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
