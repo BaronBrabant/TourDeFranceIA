@@ -7,7 +7,7 @@
 
     <img id="map" src="../static/img/gameBoard.png" alt="map" class="superposeMap" usemap="#map">
 
-    <img id="cyclist" class="superpose" src="../static/img/cyclist.png" style="width:100px">
+    <img id="cyclist" class="superpose" src="../static/img/cyclist.png" style="width:30px">
 
 </div>
 
@@ -15,11 +15,14 @@
 
     window.onload = function() {
        
-        let positonX = positon1[0][0]*document.getElementById("mapDiv").clientWidth
-        let positonY = positon1[0][1]*document.getElementById("mapDiv").clientHeight
+        let positonX = {{position}}[0]*document.getElementById("mapDiv").clientWidth - 10
+        let positonY = {{position}}[1]*document.getElementById("mapDiv").clientHeight - 10
 
-        document.getElementById("cyclist").style.top = "500px";
-        document.getElementById("cyclist").style.left = positonY;
+        console.log(positonX)
+        console.log(positonY)
+
+        document.getElementById("cyclist").style.setProperty("left", positonX + "px");
+        document.getElementById("cyclist").style.setProperty("top", positonY + "px");
 
     }
 

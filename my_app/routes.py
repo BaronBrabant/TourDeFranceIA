@@ -23,43 +23,41 @@ def main():
       f.write(str(listRatio))
       f.close()
 
-   #fil = open("test.txt", "r")
-   #positions = fil.read()
-#
-   #opens = 0
-   #closes = 0
-   #for i in positions:
-   #   if i == "[":
-   #      opens += 1
-   #   if i == "]":
-   #      closes += 1
-#
-   #print(opens)
-   #print(closes)
-   #
-   #positions.strip()
-   #print(positions)
-#
-#
-   #positions = ast.literal_eval(positions)
-   #print(positions)
-#
-   ##varTemp = {"data": positions}
-##
-   ##varTemp = json.loads(varTemp)
-##
-   ##print(varTemp)
-#
-   #
-#
-   #
-#
-   #position1 = positions[1]
+   """
+   fil = open("saveRatio.txt", "r")
+   positions = fil.read()
+
+   opens = 0
+   closes = 0
+   for i in positions:
+      if i == "[":
+         opens += 1
+      if i == "]":
+         closes += 1
+
+   print(opens)
+   print(closes)
+
+   positions.strip()
+   print(positions)
+
+
+   positions = ast.literal_eval(positions)
+   print(positions)
+
+   #varTemp = {"data": positions}
+
+   #varTemp = json.loads(varTemp)
+
+   #print(varTemp
 
 
    # list of the information jokes without the joke itself
+ """
+   position = [0.30859375, 0.4482758620689655]
+  
 
-   return render_template('playerDialogBox.html')
+   return render_template('playerDialogBox.html', position = position)
 
 
 
