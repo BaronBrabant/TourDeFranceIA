@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block mapBlock %}
+
+<div id="mapDiv">
+
+    <img id="map" src="../static/img/gameBoard.png" alt="map" class="img-fluid" usemap="#map">
+
+</div>
+
+{% endblock %}
+
+{% block scriptBlock %}
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="../static/js/home.js"></script>
+{% endblock %}

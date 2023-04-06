@@ -1,84 +1,52 @@
-.panierBtn {
-  	background-color: white;
-  	color: rgb(0, 132, 255);
-  	border: 1.3px solid black;
-  	padding: 6px 12px;
-  	border-radius: 6px;
-  	cursor: pointer;
-  	text-align: center;
-  	text-decoration: none;
-  	display: inline-block;
-  	font-size: 16px;
-  	margin: 2px 2px;
+
+#mapDiv {
+    float:left;
+    width: 50%;
+    border-width: 20;
 }
 
-.panierBtn:hover {
-    background-color: rgb(0, 132, 255);
-    color: white;
+#father {
+    border-width: 20;   
+    display: block;
 }
 
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
-    margin: auto;
-    text-align: center;
-    font-family: arial;
+#inside-right {
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 50%;
+    height: 100%;
+    float: right;
+    
 }
-  
-.price {
-    color: grey;
-    font-size: 22px;
-}
-  
-.card button {
-    border: none;
-    outline: 0;
-    padding: 12px;
-    color: white;
-    background-color: #000;
-    text-align: center;
-    cursor: pointer;
+
+#inside-right #playerCard {
+    box-sizing: border-box;
+    height: 50%;
     width: 100%;
-    font-size: 18px;
-}
-  
-.card button:hover {
-    opacity: 0.7;
-}
-  
-div.scroll {
-    margin:4px, 4px;
-    padding:4px;
-    background-color: rgb(255, 255, 255);
-    height: 300px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align:justify;
-}
-  
-div.scrollProjects {
-    margin:4px, 4px;
-    padding:4px;
-    background-color: rgb(255, 255, 255);
-    overflow-x: hidden;
-    overflow-y: auto;
-    text-align:justify;
+    background-color: #FFE5B4;
 }
 
-.deleteButton {
-	background-color: white;
-  	color: red;
-  	border: 1.3px solid black;
-	padding: 6px 12px;
-  	border-radius: 6px;
-  	cursor: pointer;
-  	text-align: center;
-  	text-decoration: none;
-  	display: inline-block;
-  	font-size: 16px;
-  	margin: 2px 2px;
+#inside-right #playerChoice {
+    box-sizing: border-box;
+    height: 50%;
+    width: 100%;
+    background-color: #FAA0A0;
 }
-.deleteButton:hover {
-	background-color: red;;
-    color: white;
+
+#playerDialogBox {
+    height: 100%;
+    background-color: #C1E1C1;
+}
+
+#top {  
+    position: absolute;
+    height: 65%;
+    max-height: 65%;
+}
+
+#bottom {  
+    position: absolute;
+    bottom:0px;
+    height:35%;
+    width: 100%;
 }

@@ -19,72 +19,32 @@
 <body>
     
     
-    <nav class="navbar navbar-expand-sm navbar-dark bg-danger">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Siparium</a>
-    
-            <div class="collapse navbar-collapse" id="mynavbar">
+    <div id="father"> 
 
-                {% if isLogged == False%}
-            
-            </div>
-
-            {% block loginBlock %}
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-            </ul>
+        <div id="top">
+            {% block mapBlock %}
             {% endblock %}
 
-                {%else%}
+            <div id="inside-right">
 
-                {% block myJokesBlock %}
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" href="/myJokes">My jokes</a></li>
-                </ul>
+                {% block playerCards %}
                 {% endblock %}
 
-                {% block profileBlock %}
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" href="/myProfile">Profile</a></li>
-                </ul>
-                {% endblock %}
-                
-                {% if user_role == True %}
-
-                {% block usersBlock %}
-                <ul class="navbar-nav mr-auto">
-                    <li class = "nav-item"><a class="nav-link" href="/showUsers">Users</a></li>
-                </ul>
+                {% block playerChoice %}
                 {% endblock %}
 
-                {%endif%}
-            
+
             </div>
-            
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item"><a class="nav-link" id="target" href="/logout">Logout</a></li>
-            </ul>
-            
-            {%endif%}
-            
-            <ul class="navbar-nav ml-auto">
-                <a href = "/basket">
-                    <button class="panierBtn" type="button"><i class="fa fa-shopping-cart"></i></button>
-                </a>  
-            </ul>
-        
         </div>
-    </nav>
+        
+        <div id="bottom">
+            {% block playerDialogBox %}
+            {% endblock %}
+        </div>
 
-    
+    </div>
 
-    {% block contentBlock %}
-    {% endblock %}
-
-    {% block scriptBlock %}
-    {% endblock %}
-
-    <script src="../static/js/basket.js"></script>
+    <script src="../static/js/movement.js"></script>
 
 </body>
 </html>
