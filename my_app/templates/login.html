@@ -1,0 +1,35 @@
+{% extends 'loginWindow.html' %}
+{% import 'macros.html' as macros %}
+
+{% block titleBlock %}
+<title>Login</title>
+{% endblock %}
+
+
+{% block loginBlock %}
+<ul class="navbar-nav ml-auto">
+    <li class="nav-item"><a class="nav-link active" href="/login">Login</a></li>
+</ul>
+{% endblock %}
+
+
+{% block content %}
+<h1>Log-in</h1>
+
+{{ macros.show_form_errors(form) }}
+
+<form action="{{ url_for('my_blueprint.login') }}"  method="post" novalidate>
+    <div class="form-group">
+        {{ form.csrf_token }}
+
+        {{ macros.render_field(form.username, 'username') }}
+        {{ macros.render_field(form.passwd, 'passwd') }}
+
+        {{ form.submit(class='mt-4 mx-auto btn btn-primary') }}
+    </div>
+</form>
+
+<hr>
+<h5>Don't have an account yet?</h5>
+<a class="btn btn-primary" href="{{ url_for('my_blueprint.register') }}" role="button">Register</a>
+{% endblock %}

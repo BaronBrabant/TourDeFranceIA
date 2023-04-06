@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block titleBlock %}
+<title>Basket</title>
+{% endblock %}
+
+
+{% block contentBlock %}
+<h5 id="nbBasket"></h5>
+
+<div class="container p-3">
+    <table class="table" id="basketTable">
+        <thead>
+            <tr>
+                <th>Tier</th>
+                <th>Type</th>
+                <th>Keywords</th>
+                <th>Price</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+
+      <tbody>
+        <tr>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+{% if isLogged == True%}
+<input type="button" value="Pay" style="float: right;" onclick="pay()">
+{%else%}
+<input type="button" value="Login to pay" style="float: right;" onclick="login()">
+{%endif%}
+
+{% endblock %}
+
+{% block scriptBlock %}
+{% endblock %}

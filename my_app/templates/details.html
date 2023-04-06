@@ -1,0 +1,132 @@
+{% import 'macros.html' as macros %}
+{% extends "base.html" %}
+
+{% block titleBlock %}
+<title>Description</title>
+{% endblock %}
+
+
+{% block contentBlock %}
+
+{% if score == 0 %}
+<h1>Be the first to review this joke !</h1>
+{% else%}
+<h1>Average Score: {{score}}</h1>
+{% endif %}
+<div class="card">
+    <img src="../static/img/img.jpg" style="width:100%">
+    <h1>{{ joke.keywords }}</h1>
+    <p>Price : {{ joke.price }}€</p>
+    <p>{{ joke.description}}</p>
+    <p>Type : {{ joke.type }}</p>
+    <p>Author : {{ joke.author }}</p>
+    {% if bought == False %}
+    <p><button onclick=addToCart(joke)>Add to Cart</button></p>
+    {% elif bought == True %}
+    <button onclick="toggleJoke()">Show Joke</button>
+    {% endif %}
+</div>
+{% if bought == True %}
+<div id = "joke" style = "visibility: hidden;">
+<h2>{{ joke.joke }}</h2>
+</div>
+{% endif %}
+
+<h1>Users Reviews</h1>
+{%if usernameList|length == 0%}
+<p>No reviews</p>
+
+{% else %}
+
+<div class = "scroll">
+    <table class = "table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Comment</th>
+                <th>Review out of 5</th>
+            </tr>
+        </thead>
+
+
+        {%for i in range(usernameList|length)%}
+        <tbody>
+            <tr>
+                <td>{{usernameList[i]}}</td>
+                <td>{{reviewList[i][2]}}</td>
+                <td>{{reviewList[i][3]}}</td>
+            </tr>
+        </tbody>
+        
+        {%endfor%}
+    </table>
+</div>
+
+{%endif %}
+
+{{ macros.show_form_errors(form) }}
+
+{% if bought == True %}
+<form action="{{ url_for('my_blueprint.showJoke', id = joke.id) }}"  method="post" novalidate>
+    <div class="form-group">
+
+        {{ form.csrf_token }}
+
+        {{ macros.render_field(form.comment, 'comment') }}
+
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id ="review" name = "review" type="radio" required minlength="1"  value="1">
+            <label class="form-check-label" for="review">1</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id ="review" name = "review" type="radio" required minlength="1"  value="2">
+            <label class="form-check-label" for="review">2</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id ="review" name = "review" type="radio" required minlength="1"  value="3">
+            <label class="form-check-label" for="review">3</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id ="review" name = "review" type="radio" required minlength="1"  value="4">
+            <label class="form-check-label" for="review">4</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" id ="review" name = "review" type="radio" required minlength="1"  value="5">
+            <label class="form-check-label" for="review">5</label>
+        </div>
+
+        {{ form.submit(class='mt-4 mx-auto btn btn-primary') }}
+    </div>
+</form>
+{%endif%}
+
+<script>
+
+    const joke = JSON.parse('{{ jokeObj | tojson | safe}}');
+
+    function addToCart(elem) {
+        console.log(joke)
+        console.log(elem)
+        sessionStorage.setItem(elem.id, JSON.stringify(elem))
+    }
+
+    function toggleJoke() {
+    var x = document.getElementById('joke');
+    if (x.style.visibility === 'hidden') {
+        console.log("hello");
+      x.style.visibility = 'visible';
+    } else {
+      x.style.visibility = 'hidden';
+    }
+}
+</script>
+
+{% endblock %}
+
+
+
+{% block scriptBlock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+{% endblock %}

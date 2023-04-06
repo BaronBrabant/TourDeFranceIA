@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {% block titleBlock %}
+    <title>Base</title>
+    {% endblock %}
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+<body>
+    
+    
+    <nav class="navbar navbar-expand-sm navbar-dark bg-danger">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Siparium</a>
+    
+            <div class="collapse navbar-collapse" id="mynavbar">
+
+                {% if isLogged == False%}
+            
+            </div>
+
+            {% block loginBlock %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            </ul>
+            {% endblock %}
+
+                {%else%}
+
+                {% block myJokesBlock %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/myJokes">My jokes</a></li>
+                </ul>
+                {% endblock %}
+
+                {% block profileBlock %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/myProfile">Profile</a></li>
+                </ul>
+                {% endblock %}
+                
+                {% if user_role == True %}
+
+                {% block usersBlock %}
+                <ul class="navbar-nav mr-auto">
+                    <li class = "nav-item"><a class="nav-link" href="/showUsers">Users</a></li>
+                </ul>
+                {% endblock %}
+
+                {%endif%}
+            
+            </div>
+            
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" id="target" href="/logout">Logout</a></li>
+            </ul>
+            
+            {%endif%}
+            
+            <ul class="navbar-nav ml-auto">
+                <a href = "/basket">
+                    <button class="panierBtn" type="button"><i class="fa fa-shopping-cart"></i></button>
+                </a>  
+            </ul>
+        
+        </div>
+    </nav>
+
+    
+
+    {% block contentBlock %}
+    {% endblock %}
+
+    {% block scriptBlock %}
+    {% endblock %}
+
+    <script src="../static/js/basket.js"></script>
+
+</body>
+</html>

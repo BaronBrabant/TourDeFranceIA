@@ -1,0 +1,84 @@
+.panierBtn {
+  	background-color: white;
+  	color: rgb(0, 132, 255);
+  	border: 1.3px solid black;
+  	padding: 6px 12px;
+  	border-radius: 6px;
+  	cursor: pointer;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+  	font-size: 16px;
+  	margin: 2px 2px;
+}
+
+.panierBtn:hover {
+    background-color: rgb(0, 132, 255);
+    color: white;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+}
+  
+.price {
+    color: grey;
+    font-size: 22px;
+}
+  
+.card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+}
+  
+.card button:hover {
+    opacity: 0.7;
+}
+  
+div.scroll {
+    margin:4px, 4px;
+    padding:4px;
+    background-color: rgb(255, 255, 255);
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
+}
+  
+div.scrollProjects {
+    margin:4px, 4px;
+    padding:4px;
+    background-color: rgb(255, 255, 255);
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align:justify;
+}
+
+.deleteButton {
+	background-color: white;
+  	color: red;
+  	border: 1.3px solid black;
+	padding: 6px 12px;
+  	border-radius: 6px;
+  	cursor: pointer;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+  	font-size: 16px;
+  	margin: 2px 2px;
+}
+.deleteButton:hover {
+	background-color: red;;
+    color: white;
+}
