@@ -5,6 +5,7 @@ from .models import *
 from .database import db
 import json
 import ast
+import os
 
 tdf_routes = Blueprint('my_blueprint', __name__)
 
@@ -14,7 +15,15 @@ MainPage with the list of all the jokes
 @tdf_routes.route('/', methods = ['GET', 'POST'])
 def main():
 
+ 
+
    if request.method == "POST":
+
+      info = request.get_data()
+
+      print(info)
+
+      """
       f = open("saveRatio.txt", "w")
  
       listRatio = request.form["data"]
@@ -22,6 +31,7 @@ def main():
       print(listRatio)
       f.write(str(listRatio))
       f.close()
+      """
 
    """
    fil = open("saveRatio.txt", "r")

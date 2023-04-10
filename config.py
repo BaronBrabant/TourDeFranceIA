@@ -6,6 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class BaseConfig:
     DEBUG=False
+    print(basedir)
     # Secret used in encryption
     SECRET_KEY=binascii.hexlify(os.urandom(24))
     # sqlite:///absolute/path/to/database
