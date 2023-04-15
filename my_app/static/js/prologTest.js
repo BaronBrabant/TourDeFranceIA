@@ -26,9 +26,47 @@ function testCall() {
 
 function testCallNode(){
 
-    axios.post('http://127.0.0.1:3000/', {
-        testData: 'hello world'
+    /*
+    axios.post('http://127.0.0.1:3000/API/test', {
+        body: JSON.stringify({
+            data : "hello world from html"
+        })
     })
+    */
+    var data = {};
+                data.title = "title";
+                data.message = "message";
+
+    jQuery.ajax({
+        type : 'POST',
+        url : "http://127.0.0.1:3000/API/test",
+        data : JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+      });
+    
+
+}
+
+function playCard(Card){
+
+    /*
+    axios.post('http://127.0.0.1:3000/API/test', {
+        body: JSON.stringify({
+            data : "hello world from html"
+        })
+    })
+    */
+    var data = {};
+                data.title = "title";
+                data.message = "message";
+
+    jQuery.ajax({
+        type : 'POST',
+        url : "http://127.0.0.1:3000/API/test",
+        data : JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+      });
+    
 
 }
 
