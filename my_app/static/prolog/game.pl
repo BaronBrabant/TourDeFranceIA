@@ -1,4 +1,33 @@
-:- include('gameData.pl').
+:- use_module(library(lists)).
+:- consult('gameData.pl').
+
+cyclist(26, 1, a, n1).
+cyclist(26, 2, b, n1).
+cyclist(26, 3, c, n2).
+
+cyclist(89, 1, a, n1).
+cyclist(89, 2, b, n2).
+cyclist(8, 2, b, n2).
+cyclist(8, 2, c, n2).
+cyclist(30, 1, n, n2).
+
+cyclist(33, 1, n, n2).
+cyclist(33, 2, n, n2).
+%cyclist(33, 3, n, n2).
+
+cyclist(85, 1, n, n2).
+cyclist(92, 1, n, n2).
+
+cyclist(50, 1, n, n2).
+cyclist(50, 2, n, n2).
+
+cyclist(5, 1, n, n2).
+cyclist(5, 3, n, n2).
+
+cyclist(23, 1, n, n2).
+cyclist(23, 2, n, n2).
+
+
 
 %positionCyclist(Position, Lane, CurveId, Cyclist) :- 
 %    					positionCyclist(X, _, _, Cyc), 
@@ -11,8 +40,8 @@
 
 nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :- 
     NewPos is Position + Movement,
-    not(getPositionSplit(NewPos)), 
-    not(getPositionCurve(NewPos)),
+    \+(getPositionSplit(NewPos)), 
+    \+(getPositionCurve(NewPos)),
     isFreeNormalLane(NewPos, Lane), CurveId = n.
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
@@ -20,36 +49,36 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
     getPositionSplit(NewPos), 
     getPositionCurve(NewPos),
     (getPositionSplit(Position), isFreeWidthSplitCurve(NewPos, LaneIn, CurveId, Lane) ; 
-    not(getPositionSplit(Position)), (LaneIn2 = 1 ; LaneIn2 = 2; LaneIn2 = 3), 
+    \+(getPositionSplit(Position)), (LaneIn2 = 1 ; LaneIn2 = 2; LaneIn2 = 3), 
     isFreeWidthSplitCurve(NewPos, LaneIn2, CurveId, Lane)).
 
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
     NewPos is Position + Movement,
     getPositionSplit(NewPos), 
-    not(getPositionCurve(NewPos)),
+    \+(getPositionCurve(NewPos)),
     (getPositionSplit(Position), isFreeWidthSplit(Position, NewPos, LaneIn, Lane), CurveId = n ; 
-    not(getPositionSplit(Position)), (LaneIn2 = 1 ; LaneIn2 = 2; LaneIn2 = 3), 
+    \+(getPositionSplit(Position)), (LaneIn2 = 1 ; LaneIn2 = 2; LaneIn2 = 3), 
     isFreeWidthSplit(Position, NewPos, LaneIn2, Lane), CurveId = n).
 
 nextMove(Position,_,  Movement, NewPos, Lane, CurveId) :- 
     NewPos is Position + Movement,
-    not(getPositionSplit(NewPos)), 
+    \+(getPositionSplit(NewPos)), 
     getPositionCurve(NewPos),
  	isFreeWidthCurve(NewPos, CurveId, Lane).
     							  
     							  
              
 
-%check if position with newPos is valid, check if intial lane is free and if not redo with incremented
+%check if position with newPos is valid, check if intial lane is free and if \+ redo with incremented
 %lane
 
 %isFreeWidth3
 
 %(in, out)
-isFreeNormalLane(NewPos, Lane) :- (positionLegal(NewPos, 1, n), not(cyclist(NewPos, 1, n, _)), Lane = 1, !);
-    						(positionLegal(NewPos, 2, n), not(cyclist(NewPos, 2, n, _)), Lane = 2, !);
-    						(positionLegal(NewPos, 3, n), not(cyclist(NewPos, 3, n, _)), Lane = 3).
+isFreeNormalLane(NewPos, Lane) :- (positionLegal(NewPos, 1, n), \+(cyclist(NewPos, 1, n, _)), Lane = 1, !);
+    						(positionLegal(NewPos, 2, n), \+(cyclist(NewPos, 2, n, _)), Lane = 2, !);
+    						(positionLegal(NewPos, 3, n), \+(cyclist(NewPos, 3, n, _)), Lane = 3).
                         
 
     
@@ -63,28 +92,28 @@ getPositionSplit(Position):- 	(Position >= 22,
 isFreeWidthSplit(Position, NewPos, LaneIn, LaneOut):- 
     getPositionSplit(NewPos),
     getPositionWidth(Position, X), 
-    ((X == 2, not(cyclist(NewPos, LaneIn, n, _)), LaneOut = LaneIn);
-    (X == 3, ((LaneIn == 3, not(cyclist(NewPos, LaneIn, n , _)), LaneOut = LaneIn); 
-    	(LaneIn \= 3, ((not(cyclist(NewPos, 1, n,_)), LaneOut = 1) ; (not(cyclist(NewPos, 2, n,_)), LaneOut = 2)))))).
+    ((X == 2, \+(cyclist(NewPos, LaneIn, n, _)), LaneOut = LaneIn);
+    (X == 3, ((LaneIn == 3, \+(cyclist(NewPos, LaneIn, n , _)), LaneOut = LaneIn); 
+    	(LaneIn \= 3, ((\+(cyclist(NewPos, 1, n,_)), LaneOut = 1) ; (\+(cyclist(NewPos, 2, n,_)), LaneOut = 2)))))).
 
 %(in, out, out)
 isFreeWidthCurve(NewPos, CurveId, Lane):- 
-    (not(cyclist(NewPos, 1, a, _)), CurveId = a, Lane = 1); 
-    (not(cyclist(NewPos, 2, c, _)), (not(cyclist(NewPos, 2, b, _)), CurveId = b, Lane = 2); 
-    	(not(cyclist(NewPos, 2, c, _)), CurveId = c, Lane = 2)). 
+    (\+(cyclist(NewPos, 1, a, _)), CurveId = a, Lane = 1); 
+    (\+(cyclist(NewPos, 2, c, _)), (\+(cyclist(NewPos, 2, b, _)), CurveId = b, Lane = 2); 
+    	(\+(cyclist(NewPos, 2, c, _)), CurveId = c, Lane = 2)). 
 
 %(in, in, out, out)
 isFreeWidthSplitCurve2(NewPos, LaneIn, CurveId, LaneOut):-
-    (LaneIn == 1, (not(cyclist(NewPos, LaneIn, a, _)), LaneOut = LaneIn, CurveId = a)); 
-    (LaneIn == 2, not(cyclist(NewPos, LaneIn, c, _)), ((not(cyclist(NewPos, LaneIn, b, _)), LaneOut = LaneIn, CurveId = b); 
-    	(not(cyclist(NewPos, LaneIn, c, _)), LaneOut = LaneIn, CurveId = c))).
+    (LaneIn =:= 1, (\+(cyclist(NewPos, LaneIn, a, _)), LaneOut = LaneIn, CurveId = a)); 
+    (LaneIn =:= 2, \+(cyclist(NewPos, LaneIn, c, _)), ((\+(cyclist(NewPos, LaneIn, b, _)), LaneOut = LaneIn, CurveId = b); 
+    	(\+(cyclist(NewPos, LaneIn, c, _)), LaneOut = LaneIn, CurveId = c))).
 
 %(in, in, out, out)
 isFreeWidthSplitCurve3(NewPos, LaneIn, CurveId, LaneOut):-
-    ((LaneIn == 1 ; LaneIn == 2), ((not(cyclist(NewPos, 1, a, _)), LaneOut = 1, CurveId = a); 
-    	(not(cyclist(NewPos, 2, b, _)), LaneOut = 2, CurveId = b)));
-    (LaneIn == 3, not(cyclist(NewPos, 3, d, _)), ((not(cyclist(NewPos, 3, c, _)), LaneOut = 3, CurveId = c); 
-    	(not(cyclist(NewPos, 3, d, _)), LaneOut = 3, CurveId = d))).
+    ((LaneIn == 1 ; LaneIn == 2), ((\+(cyclist(NewPos, 1, a, _)), LaneOut = 1, CurveId = a); 
+    	(\+(cyclist(NewPos, 2, b, _)), LaneOut = 2, CurveId = b)));
+    (LaneIn == 3, \+(cyclist(NewPos, 3, d, _)), ((\+(cyclist(NewPos, 3, c, _)), LaneOut = 3, CurveId = c); 
+    	(\+(cyclist(NewPos, 3, d, _)), LaneOut = 3, CurveId = d))).
     									
 %(in, in, out, out)
 isFreeWidthSplitCurve(NewPos, LaneIn, CurveId, Lane):- 
@@ -105,20 +134,11 @@ isLegalLane(Position, Lane, Width):- getPositionWidth(Position, Width),
     						Lane =< Width.
 
 isLegalInsideCurve(Width, CurveID, Lane):- 
-                         (Width == 2,((
-                         Lane == 1, 
-                         CurveID == a);
-                         (Lane == 2,
-                         member(CurveID, [b, c]))
-                         ));
-    					 (Width == 3, ((
-                          Lane == 1,
-                          CurveID == a);
-                          (Lane == 2,
-                          CurveID == b);
-    					  (Lane == 3,
-                           member(CurveID, [c, d]))
-                          )).
+                         (Width =:= 2,((Lane =:= 1, CurveID =:= a);
+                         (Lane =:= 2, member(CurveID, [b, c]))));
+    					 (Width =:= 3, ((Lane =:= 1,CurveID =:= a);
+                          (Lane =:= 2,CurveID =:= b);
+    					  (Lane =:= 3,member(CurveID, [c, d])))).
 
 getPositionWidth(Position, Width):- (((Position >= 0, Position =< 7);
                                   (Position >= 18, Position =< 35);
@@ -139,3 +159,14 @@ getPositionCurve(Position) :-     (Position >= 8,
                                   Position =< 63);
     							  (Position >= 88,
                                   Position =< 89).
+
+
+doesNotWork(A) :- \+(A).
+
+doesMemWork(A, B) :- member(A, B).
+
+doesEqWork(A, B) :- A == B.
+
+testOr(A, B) :- (A ; write(B)).
+
+testEmpty(A, _) :- write(A).

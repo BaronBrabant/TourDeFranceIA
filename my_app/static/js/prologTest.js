@@ -47,7 +47,7 @@ function testCallNode(){
 
 }
 
-function playCard(Card){
+function playCard(Card, Position, LaneIn){
 
     /*
     axios.post('http://127.0.0.1:3000/API/test', {
@@ -55,14 +55,17 @@ function playCard(Card){
             data : "hello world from html"
         })
     })
+
+    Position, LaneIn, Movement
     */
     var data = {};
-                data.title = "title";
-                data.message = "message";
+                data.card = Card;
+                data.position = Position;
+                data.laneIn = LaneIn;
 
     jQuery.ajax({
         type : 'POST',
-        url : "http://127.0.0.1:3000/API/test",
+        url : "http://127.0.0.1:3000/API/play",
         data : JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
       });
