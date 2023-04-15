@@ -65,7 +65,7 @@ def exchange_case(cartes, equipes, indice, exchanged_card_list):
 
 
 #Test
-
+"""
 cartes = initiate_cards_deck()
 equipes = [[] for _ in range(4)]
 
@@ -88,4 +88,4 @@ print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 print(cartes)
 print("------------------------------------------")
 print(equipes)
-
+"""

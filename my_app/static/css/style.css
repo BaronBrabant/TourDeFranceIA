@@ -26,6 +26,8 @@
     height: 50%;
     width: 100%;
     background-color: #FFE5B4;
+    display:flex;
+    flex-direction: column;
 }
 
 #inside-right #playerChoice {
@@ -66,4 +68,24 @@
     top: 100px;
 }
 
+.child {
+    margin-top: 1px;
+    margin-left: 1px;
+    margin-right: 1px;
+    border: #f0cc88;
+    border-style: solid;
+    height:24%;
+}
 
+#fontTeam {
+    font-size: 80%;
+    text-align: center;
+}
+
+.cardBox {
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #090601;
+
+}

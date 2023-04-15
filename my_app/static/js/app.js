@@ -106,7 +106,7 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
     //test empty _
     var testEmpty = "testEmpty(1, a).";
     //test cyclist cyclist(89, 1, a, n1).
-    var testCyclist = "cyclist(89, 1, a, n1).";
+    var testCyclist = "cyclist(89, 1, a, n1, _).";
 
     session.consult("../prolog/game.pl", {
         success: function() {
@@ -135,16 +135,85 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
     });
 
   
-
     //nextMove(Position, _ , Movement, NewPos, Lane, CurveId)
- 
-
-    
-
-    
 
     axios.post('http://127.0.0.1:5000/', {
       testData: 'hello world from node code'
+    })
+})
+
+
+app.post('/API/testAdd',jsonParser, cors(),  function(req, res) {
+    //console.log(res);
+  
+    var testAddCyclist = "asserta(cyclist(1, 0, n, n1, _)).";
+
+    session.consult("../prolog/game.pl", {
+        success: function() {
+            
+            session.query(testAddCyclist, {  
+                success: function(goal) {
+                    
+                    session.answer({
+                        success: function(answer) {
+                            console.log(session.format_answer(answer)); // X = salad ;
+                            ;
+                        },
+                        fail: function() {console.log("fail Answer") },
+                        error: function(err) {console.log("this is the error");console.log(err)},
+                        limit: function() { }
+                    });
+                
+
+                },
+                error: function(err) { console.log("error query") }
+            });
+
+
+         },
+        error: function(err) { console.log(err) }
+    });
+
+  
+    axios.post('http://127.0.0.1:5000/', {
+      testData: 'This is the add function response'
+    })
+})
+
+app.post('/API/testNewAdd',jsonParser, cors(),  function(req, res) {
+    //console.log(res);
+  
+    var testAddCyclist = "cyclist(0, 0, n, n1, _).";
+
+    session.consult("../prolog/game.pl", {
+        success: function() {
+            
+            session.query(testAddCyclist, {  
+                success: function(goal) {
+                    
+                    session.answer({
+                        success: function(answer) {
+                            console.log(session.format_answer(answer)); // X = salad ;
+                            ;
+                        },
+                        fail: function() {console.log("fail Answer") },
+                        error: function(err) {console.log(err)},
+                        limit: function() { }
+                    });
+                
+
+                },
+                error: function(err) { console.log("error query") }
+            });
+
+
+         },
+        error: function(err) { console.log(err) }
+    });
+
+  
+    axios.post('http://127.0.0.1:5000/', {
+      testData: 'This is the check new term function response'
     })
 })
 

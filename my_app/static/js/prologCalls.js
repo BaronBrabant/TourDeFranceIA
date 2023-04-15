@@ -47,7 +47,7 @@ function testCallNode(){
 
 }
 
-function playCard(Card, Position, LaneIn){
+function playCard(Position, LaneIn){
 
     /*
     axios.post('http://127.0.0.1:3000/API/test', {
@@ -58,6 +58,17 @@ function playCard(Card, Position, LaneIn){
 
     Position, LaneIn, Movement
     */
+
+    var Card = document.getElementById("cardChosen").value;
+    Card = parseInt(Card);
+
+    console.log(Card);
+
+    if (isNaN(Card)){
+        alert("Please enter a valid card number!");
+        return;
+    }
+
     var data = {};
                 data.card = Card;
                 data.position = Position;
@@ -67,6 +78,29 @@ function playCard(Card, Position, LaneIn){
         type : 'POST',
         url : "http://127.0.0.1:3000/API/play",
         data : JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+      });
+    
+
+}
+
+
+function addNewRider(){
+
+    jQuery.ajax({
+        type : 'POST',
+        url : "http://127.0.0.1:3000/API/testAdd",
+        contentType: "application/json; charset=utf-8",
+      });
+    
+
+}
+
+function checkNewRider(){
+
+    jQuery.ajax({
+        type : 'POST',
+        url : "http://127.0.0.1:3000/API/testNewAdd",
         contentType: "application/json; charset=utf-8",
       });
     
