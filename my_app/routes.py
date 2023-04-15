@@ -24,7 +24,7 @@ def main():
       print(info)
 
       """
-      f = open("saveRatio.txt", "w")
+      f = open("saveRatioFirstLeg.txt", "w")
  
       listRatio = request.form["data"]
       listRatio = json.loads(listRatio)
@@ -33,42 +33,21 @@ def main():
       f.close()
       """
 
-   """
-   fil = open("saveRatio.txt", "r")
+
+   positions = loadRatiosFromFile()
+
+   return render_template('playerDialogBox.html', positions = positions)
+
+
+
+
+def loadRatiosFromFile():
+   fil = open("saveRatioFirstLeg.txt", "r")
    positions = fil.read()
 
-   opens = 0
-   closes = 0
-   for i in positions:
-      if i == "[":
-         opens += 1
-      if i == "]":
-         closes += 1
-
-   print(opens)
-   print(closes)
-
-   positions.strip()
-   print(positions)
-
-
    positions = ast.literal_eval(positions)
-   print(positions)
 
-   #varTemp = {"data": positions}
-
-   #varTemp = json.loads(varTemp)
-
-   #print(varTemp
-
-
-   # list of the information jokes without the joke itself
- """
-   position = [0.30859375, 0.4482758620689655]
-  
-
-   return render_template('playerDialogBox.html', position = position)
-
+   return positions
 
 
 

@@ -4,6 +4,9 @@ const axios = require('axios');
 const hostname = '127.0.0.1';
 const port = 3000;
 
+const express = require('express');
+const app = express();
+
 const http = require('http');
 const https = require('https');
 
@@ -22,14 +25,14 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
 
     res.setHeader('Content-Type', 'text/plain');
-    
+
 
     session.consult("../prolog/test.pl", {
             success: function() {console.log("ok") },
             error: function(err) { console.log(err) }
         });
 
-    session.query("likes(sam, X).", {
+    session.query("likes(sam, X).", {  
         success: function(goal) {console.log(goal)},
         error: function(err) { /* Error parsing goal */ }
     });
@@ -45,6 +48,10 @@ const server = http.createServer((req, res) => {
         limit: function() { /* Limit exceeded */ }
     });
 });
+
+app.post('/', function(req, res) {
+    res.send('Hello Sir')
+})
 
 server.listen(port, hostname, () => {
 console.log(`Server running at http://${hostname}:${port}/`);
