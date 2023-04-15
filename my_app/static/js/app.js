@@ -4,8 +4,8 @@ const axios = require('axios');
 const hostname = '127.0.0.1';
 const port = 3000;
 
-const express = require('express');
-const app = express();
+//const express = require('express');
+//const app = express();
 
 const http = require('http');
 const https = require('https');
@@ -25,7 +25,6 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
 
     res.setHeader('Content-Type', 'text/plain');
-
 
     session.consult("../prolog/test.pl", {
             success: function() {console.log("ok") },
@@ -49,9 +48,9 @@ const server = http.createServer((req, res) => {
     });
 });
 
-app.post('/', function(req, res) {
-    res.send('Hello Sir')
-})
+//app.post('/', function(req, res) {
+//    res.send('Hello Sir')
+//})
 
 server.listen(port, hostname, () => {
 console.log(`Server running at http://${hostname}:${port}/`);
