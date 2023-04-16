@@ -106,6 +106,12 @@ function checkNewRider(){
     
 
 }
+
+function writeResponseBot(botResponse){
+    alert(botResponse)
+    document.getElementById("tbot").innerHTML +="<p><strong>Tbot : </strong>" + botResponse + "</p>";
+}
+
 function bot(){
     var data={}
     
@@ -113,6 +119,7 @@ function bot(){
     console.log(userInput)
     document.getElementById("tbot").innerHTML +="<p><strong>Vous : </strong>" + userInput + "</p>";
             data.query=userInput.toLowerCase().split(" ");
+            console.log("coucou 1")
             jQuery.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:3000/API/chatbot",
@@ -120,6 +127,7 @@ function bot(){
                 contentType: "application/json; charset=utf-8",
                 success: function(response) {
                     var botResponse = response.testData;
+                    console.log("Coucou ")
                     document.getElementById("tbot").innerHTML +="<p><strong>Tbot : </strong>" + botResponse + "</p>";
                 },
                 error: function(response) {

@@ -19,6 +19,7 @@
 /*                                                                       */
 /* --------------------------------------------------------------------- */
 
+convert_sentence(Words, Sentence) :-     atomic_list_concat(Words, ' ', Sentence).
 
 intersection([], _, []).
 intersection([X|Xs], Ys, [X|Zs]) :-
@@ -31,9 +32,9 @@ liste_mot_cle([case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,co
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
-select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=["celui,qui, a, le, plus, de, carte"];
-member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs"];
-member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,case, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu’il, voulait ,depasser"];
+select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=[celui, qui, a, le, plus, de, carte];
+member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
+member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=["oui, il, est, permis, de, depasser, par ,le bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,case, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu’il, voulait ,depasser"];
 
 %Puis-je deplacer un coureur sur une case occupee par un autre coureur ?
 member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=["Non"]
@@ -202,7 +203,7 @@ extract_word([C|Chars],Rest,[C|RestOfWord]) :-
     extract_word_aux(Type,Chars,Rest,RestOfWord).
 
     extract_word_aux(special,Rest,Rest,[]) :- !.
-% if Char is special, don\'t read more chars.
+% if Char is special, dont read more chars.
 
 extract_word_aux(Type,[C|Chars],Rest,[C|RestOfWord]) :-
     my_char_type(C,Type), !,
@@ -355,7 +356,7 @@ ecrire_reponse(L) :-
 % input : Li, liste de mots a ecrire
 %         Mi, indique si le premier caractere du premier mot 
 %            doit etre mis en majuscule (1 si oui, 0 si non)
-%         Ei, indique le nombre d'espaces avant ce premier mot 
+%         Ei, indique le nombre despaces avant ce premier mot 
 % output : Mf, booleen tel que decrit ci-dessus a appliquer 
 %          a la ligne suivante, si elle existe
 
@@ -368,10 +369,10 @@ ecrire_ligne([M|L],Mi,Ei,Mf) :-
 
 % ecrire_mot(M,B1,B2,E1,E2)
 % input : M, le mot a ecrire
-%         B1, indique s'il faut une majuscule (1 si oui, 0 si non)
-%         E1, indique s'il faut un espace avant le mot (1 si oui, 0 si non)
+%         B1, indique sil faut une majuscule (1 si oui, 0 si non)
+%         E1, indique sil faut un espace avant le mot (1 si oui, 0 si non)
 % output : B2, indique si le mot suivant prend une majuscule
-%          E2, indique si le mot suivant doit etre precede d'un espace
+%          E2, indique si le mot suivant doit etre precede dun espace
 
 ecrire_mot('.',_,1,_,1) :-
    write('. '), !.

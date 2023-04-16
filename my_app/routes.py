@@ -5,6 +5,8 @@ from .models import *
 from .database import db
 import ast
 from .card import initiate_cards_deck, cards_distribution, cards_distribution_to_a_team, remove_card, lucky_case, exchange_case
+import json
+
 
 
 tdf_routes = Blueprint('my_blueprint', __name__)
@@ -33,12 +35,18 @@ def main():
    session["turn"]+=1
    session["turn"] = session["turn"]%4
    
+   responseBot = " "
 
    if request.method == "POST":
 
       info = request.get_data()
+      info= json.loads(info) 
 
-      print(info)
+      responseBot = info['testData']['id']
+      print(info['testData']['id'])
+      print(type(responseBot))
+
+
 
       """
       f = open("saveRatioFirstLeg.txt", "w")
@@ -50,10 +58,11 @@ def main():
       f.close()
       """
 
+   
 
    positions = loadRatiosFromFile()
 
-   return render_template('playerDialogBox.html', positions = positions, teams = session["teams"], teamPlaying = session["turn"])
+   return render_template('playerDialogBox.html', positions = positions, teams = session["teams"], teamPlaying = session["turn"], responseBot = responseBot)
 
 
 

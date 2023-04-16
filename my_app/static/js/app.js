@@ -146,7 +146,8 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
     console.log(body);
     const goal= ` 
     produire_reponse([${body.query}],L_reponse),
-    transformer_reponse_en_string(L_reponse,Message).
+    convert_sentence(L_reponse, Message).
+    
 `;console.log(goal)
     session.consult("../prolog/chat_bot.pl",{
         success: function() {
@@ -156,8 +157,10 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
                     
                     session.answer({
                         success: function(answer) {
-                            console.log(answer);
+                            //console.log(answer);
+                            console.log(session.format_answer(answer));
                             const response = answer.lookup('Message');
+                            //console.log(response);
                             axios.post('http://127.0.0.1:5000/', {
                             testData: response
                                 })
@@ -167,6 +170,8 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
                         error: function(err) {console.log(err); console.log("fail")},
                         limit: function() { }
                     });
+
+                    
                 
 
                 },
@@ -177,7 +182,11 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
          },
         error: function(err) { console.log(err) }
     }
-    )
+    );
+
+
+
+
 
 
 })
