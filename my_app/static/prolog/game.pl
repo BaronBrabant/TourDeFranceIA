@@ -4,15 +4,16 @@
 :- dynamic(cyclist/5).
 
 % position, lane, curveId, cyclistId, teamId
-cyclist(0, 0, n, n1, 0).
-cyclist(0, 0, n, n2, 0).
-cyclist(0, 0, n, n3, 0).
-cyclist(0, 0, n, n4, 0).
 
-cyclist(0, 0, n, b1, 1).
-cyclist(0, 0, n, b2, 1).
-cyclist(0, 0, n, b3, 1).
-cyclist(0, 0, n, b4, 1).
+cyclist(0, 0, n, b1, 0).
+cyclist(0, 0, n, b2, 0).
+cyclist(0, 0, n, b3, 0).
+cyclist(0, 0, n, b4, 0).
+
+cyclist(0, 0, n, n1, 1).
+cyclist(0, 0, n, n2, 1).
+cyclist(0, 0, n, n3, 1).
+cyclist(0, 0, n, n4, 1).
 
 cyclist(0, 0, n, g1, 2).
 cyclist(0, 0, n, g2, 2).
@@ -162,6 +163,8 @@ getLast(Team, Id) :-
     findall(Number-Id, cyclist(Number,_ ,_ , Id, Team), List),
     sort(List, SortedList),
     nth0(0, SortedList, _-Id).
+
+getPosition(Id, Position, Lane) :- cyclist(Position, Lane, _, Id, _).
 
 
 doesNotWork(A) :- \+(A).

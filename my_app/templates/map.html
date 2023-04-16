@@ -7,22 +7,97 @@
 
     <img id="map" src="../static/img/gameBoard.png" alt="map" class="superposeMap" usemap="#map">
 
-    <img id="cyclist" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="1" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="2" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="3" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="4" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="5" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="6" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="7" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="8" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="9" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="10" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+    <img id="11" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+    <img id="12" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
 
 </div>
 
 <script>
 
     window.onload = function() {
-       
-        let positonX = {{position}}[0]*document.getElementById("mapDiv").clientWidth - 10
-        let positonY = {{position}}[1]*document.getElementById("mapDiv").clientHeight - 10
+        
 
-        console.log(positonX)
-        console.log(positonY)
+        let positonX = {{positionPlayerOnMap}}[0][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY = {{positionPlayerOnMap}}[0][1]*document.getElementById("mapDiv").clientHeight - 10;
 
-        document.getElementById("cyclist").style.setProperty("left", positonX + "px");
-        document.getElementById("cyclist").style.setProperty("top", positonY + "px");
+        document.getElementById("1").style.setProperty("left", positonX + "px");
+        document.getElementById("1").style.setProperty("top", positonY + "px");
+
+        let positonX1 = {{positionPlayerOnMap}}[1][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY1 = {{positionPlayerOnMap}}[1][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("2").style.setProperty("left", positonX1 + "px");
+        document.getElementById("2").style.setProperty("top", positonY1 + "px");
+
+        let positonX2 = {{positionPlayerOnMap}}[2][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY2 = {{positionPlayerOnMap}}[2][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("3").style.setProperty("left", positonX2 + "px");
+        document.getElementById("3").style.setProperty("top", positonY2 + "px");
+
+        let positonX3 = {{positionPlayerOnMap}}[3][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY3 = {{positionPlayerOnMap}}[3][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("4").style.setProperty("left", positonX3 + "px");
+        document.getElementById("4").style.setProperty("top", positonY3 + "px");
+
+        let positonX4 = {{positionPlayerOnMap}}[4][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY4 = {{positionPlayerOnMap}}[4][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("5").style.setProperty("left", positonX4 + "px");
+        document.getElementById("5").style.setProperty("top", positonY4 + "px");
+
+        let positonX5 = {{positionPlayerOnMap}}[5][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY5 = {{positionPlayerOnMap}}[5][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("6").style.setProperty("left", positonX5 + "px");
+        document.getElementById("6").style.setProperty("top", positonY5 + "px");
+
+        let positonX6 = {{positionPlayerOnMap}}[6][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY6 = {{positionPlayerOnMap}}[6][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("7").style.setProperty("left", positonX6 + "px");
+        document.getElementById("7").style.setProperty("top", positonY6 + "px");
+
+        let positonX7 = {{positionPlayerOnMap}}[7][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY7 = {{positionPlayerOnMap}}[7][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("8").style.setProperty("left", positonX7 + "px");
+        document.getElementById("8").style.setProperty("top", positonY7 + "px");
+
+        let positonX8 = {{positionPlayerOnMap}}[8][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY8 = {{positionPlayerOnMap}}[8][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("9").style.setProperty("left", positonX8 + "px");
+        document.getElementById("9").style.setProperty("top", positonY8 + "px");
+
+        let positonX9 = {{positionPlayerOnMap}}[9][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY9 = {{positionPlayerOnMap}}[9][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("10").style.setProperty("left", positonX9 + "px");
+        document.getElementById("10").style.setProperty("top", positonY9 + "px");
+
+        let positonX10 = {{positionPlayerOnMap}}[10][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY10 = {{positionPlayerOnMap}}[10][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("11").style.setProperty("left", positonX10 + "px");
+        document.getElementById("11").style.setProperty("top", positonY10 + "px");
+
+        let positonX11 = {{positionPlayerOnMap}}[11][0]*document.getElementById("mapDiv").clientWidth - 10;
+        let positonY11 = {{positionPlayerOnMap}}[11][1]*document.getElementById("mapDiv").clientHeight - 10;
+
+        document.getElementById("12").style.setProperty("left", positonX11 + "px");
+        document.getElementById("12").style.setProperty("top", positonY11 + "px");
 
     }
 

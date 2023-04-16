@@ -6,14 +6,10 @@
 <div id="playerChoice">
 
     <!--<button onclick="playCard('4', '1', '1')">Click me to test call</button>-->
-    <button onclick="addNewRider()">Click me to add new rider</button> 
-    <button onclick="checkNewRider()">Click me to test new rider</button>    
-    
-
-
-    <label for="fname">Enter which card you want to play:</label>
+ 
+    <label for="fname">Its {{country}}'s turn to play:</label>
     <input type="text" id="cardChosen" name="fname"><br><br>
-    <input type="submit" value="Submit" onclick="playCard('1', '1')">
+    <input type="submit" value="Submit" onclick="playCard({{teamPlaying}})">
 
 
 

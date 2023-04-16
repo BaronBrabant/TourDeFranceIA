@@ -1,0 +1,76 @@
+<img id="cyclist1" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="cyclist2" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="cyclist3" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+    <img id="cyclist4" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="cyclist5" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="cyclist6" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+    <img id="cyclist7" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="cyclist8" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="cyclist9" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+    <img id="cyclist10" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+    <img id="cyclist11" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+    <img id="cyclist12" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+
+    let positonX = {{positions}}[i][0]*document.getElementById("mapDiv").clientWidth - 10
+    let positonY = {{positions}}[i][1]*document.getElementById("mapDiv").clientHeight - 10
+
+    console.log(positonX)
+    console.log(positonY)
+
+    document.getElementById("cyclist1").style.setProperty("left", positonX + "px");
+    document.getElementById("cyclist1").style.setProperty("top", positonY + "px");
+
+    {% extends "base.html" %}
+
+
+    {% block mapBlock %}
+    
+    <div id="mapDiv">
+    
+        <img id="map" src="../static/img/gameBoard.png" alt="map" class="superposeMap" usemap="#map">
+    
+        <img id="cyclist1" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+        <img id="cyclist2" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+        <img id="cyclist3" class="superpose" src="../static/img/cyclistRed.png" style="width:30px">
+        <img id="cyclist4" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+        <img id="cyclist5" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+        <img id="cyclist6" class="superpose" src="../static/img/cyclistBlue.png" style="width:30px">
+        <img id="cyclist7" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+        <img id="cyclist8" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+        <img id="cyclist9" class="superpose" src="../static/img/cyclistPurple.png" style="width:30px">
+        <img id="cyclist10" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+        <img id="cyclist11" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+        <img id="cyclist12" class="superpose" src="../static/img/cyclistGreen.png" style="width:30px">
+    
+    
+    </div>
+    
+    <script>
+    
+        $(document).ready(function() {
+            
+            var number = 0;
+            for (let i = 0; i < {{positions}}.length; i++) {
+            
+                let positonX = {{positions}}[i][0]*document.getElementById("mapDiv").clientWidth - 10
+                let positonY = {{positions}}[i][1]*document.getElementById("mapDiv").clientHeight - 10
+    
+                console.log(positonX)
+                console.log(positonY)
+    
+                document.getElementById("cyclist1").style.setProperty("left", positonX + "px");
+                document.getElementById("cyclist1").style.setProperty("top", positonY + "px");
+                number += 1;
+            }
+        }
+        );
+    
+    </script>
+    
+    {% endblock %}
+    
+    {% block scriptBlock %}
+        <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+        <script src="../static/js/home.js"></script>
+    {% endblock %}

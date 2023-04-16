@@ -5,7 +5,7 @@ let set = [];
 let setNumber = 3;
 let switcher = false;
 
-let x = document.getElementById("mapDiv")
+let photo = document.getElementById("mapDiv")
 
 window.addEventListener('click',
     function (e) {
@@ -20,16 +20,17 @@ window.addEventListener('click',
         
         if (setNumber == 3){
             if (nb%3==0){
+                console.log(ratios)
                 sendListBackend(ratios)
                 nb = 0;
                 ratios.push(set)
                 set = [];
-                let vals = [e.x/x.clientWidth, e.y/x.clientHeight];
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
                 set.push(vals);
                 nb++;
             }
             else {
-                let vals = [e.x/x.clientWidth, e.y/x.clientHeight];
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
                 set.push(vals);
                 nb++;
             }
@@ -40,12 +41,12 @@ window.addEventListener('click',
                 nb = 0;
                 ratios.push(set)
                 set = [];
-                let vals = [e.x/x.clientWidth, e.y/x.clientHeight];
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
                 set.push(vals);
                 nb++;
             }
             else {
-                let vals = [e.x/x.clientWidth, e.y/x.clientHeight];
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
                 set.push(vals);
                 nb++;
             }
@@ -58,7 +59,7 @@ function sendListBackend(list) {
     jQuery.ajax({
         type : 'POST',
         data : {'data':JSON.stringify(list)},
-        url : "/",
+        url : "/saveRatio",
       
       });
 

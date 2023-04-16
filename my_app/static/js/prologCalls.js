@@ -47,7 +47,7 @@ function testCallNode(){
 
 }
 
-function playCard(Position, LaneIn){
+function playCard(Team){
 
     /*
     axios.post('http://127.0.0.1:3000/API/test', {
@@ -60,9 +60,12 @@ function playCard(Position, LaneIn){
     */
 
     var Card = document.getElementById("cardChosen").value;
+    $("#cardChosen").val("");
+    //document.getElementById("cardChosen").innerHTML = "";
     Card = parseInt(Card);
 
     console.log(Card);
+    console.log(Team);
 
     if (isNaN(Card)){
         alert("Please enter a valid card number!");
@@ -71,14 +74,16 @@ function playCard(Position, LaneIn){
 
     var data = {};
                 data.card = Card;
-                data.position = Position;
-                data.laneIn = LaneIn;
+                data.team = Team;
 
     jQuery.ajax({
         type : 'POST',
         url : "http://127.0.0.1:3000/API/play",
         data : JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
+        success: function(html){
+            wilocation.reload();
+        }
       });
     
 
