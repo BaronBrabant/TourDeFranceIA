@@ -120,7 +120,7 @@ function bot(){
     document.getElementById("tbot").innerHTML +="<p><strong>Vous : </strong>" + userInput + "</p>";
             data.query=userInput.toLowerCase().split(" ");
             console.log("coucou 1")
-            jQuery.ajax({
+            jQuery.ajax({   
                 type: 'POST',
                 url: "http://127.0.0.1:3000/API/chatbot",
                 data: JSON.stringify(data),
