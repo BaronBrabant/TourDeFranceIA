@@ -47,24 +47,26 @@ def main():
 
    if request.method == "POST":
 
-      info = request.get_json()
+      info = request.get_data()
+      info = json.loads(info)
 
-      info = ast.literal_eval(info["allCyclists"])
-      print(info)
-      info= json.loads(info) 
+      try:
+         responseBot = info['testData']['id']
+         print(info['testData']['id'])
+         print(type(responseBot))
+      except KeyError:
+         print(info)
+         
+         info = ast.literal_eval(info["allCyclists"])
+         print(info)
 
-      responseBot = info['testData']['id']
-      print(info['testData']['id'])
-      print(type(responseBot))
-
-
-      info = sorted(info, key = lambda x: x[4])
-      
-      positionEveryone = []
-      for cyclist in info:
-         positionEveryone.append([cyclist[0], cyclist[1]])
-      
-      savePlayerState(positionEveryone)
+         info = sorted(info, key = lambda x: x[4])
+         
+         positionEveryone = []
+         for cyclist in info:
+            positionEveryone.append([cyclist[0], cyclist[1]])
+         
+         savePlayerState(positionEveryone)
       
       return redirect(url_for('my_blueprint.main'))
       """
