@@ -9,6 +9,7 @@ from .card import initiate_cards_deck, cards_distribution, cards_distribution_to
 import json
 
 
+
 tdf_routes = Blueprint('my_blueprint', __name__)
 
 
@@ -42,6 +43,7 @@ def main():
    turn = gameState["turn"]
    
    turn = (turn+1)%4
+   responseBot = " "
 
    if request.method == "POST":
 
@@ -49,9 +51,14 @@ def main():
 
       info = ast.literal_eval(info["allCyclists"])
       print(info)
+      info= json.loads(info) 
+
+      responseBot = info['testData']['id']
+      print(info['testData']['id'])
+      print(type(responseBot))
+
 
       info = sorted(info, key = lambda x: x[4])
-      print(info)
       
       positionEveryone = []
       for cyclist in info:
@@ -69,6 +76,7 @@ def main():
       f.write(str(listRatio))
       f.close()
       """   
+
 
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()

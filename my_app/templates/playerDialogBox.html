@@ -3,10 +3,19 @@
 
 {% block playerDialogBox %}
 
-<div id="playerDialogBox">
-
-    helloasdasdasdasdas
-
+<div id="tbot">
+    <p><strong>Bonjour, je suis TBot, le bot explicateur du Tour de France.
+        En quoi puis-je vous aider ?</strong></p>
 </div>
+    <label for="question"><strong>Vous :</strong></label>
+    <input type="text" id="question" name="question" autocomplete="off" />
+    <button type="submit" class="btn btn-primary" onclick="bot()">Submit</button>
+
+    <p> {{responseBot}}</p>
 
 {% endblock %}
+
+<script>
+    
+
+</script>

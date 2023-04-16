@@ -135,7 +135,55 @@ app.post('/API/test',jsonParser, cors(),  function(req, res) {
       testData: 'hello world from node code'
     })
 })
+app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
+    var body=req.body;
+    console.log(body);
+    const goal= ` 
+    produire_reponse([${body.query}],L_reponse),
+    convert_sentence(L_reponse, Message).
+    
+`;console.log(goal)
+    session.consult("../prolog/chat_bot.pl",{
+        success: function() {
+            
+            session.query(goal, {  
+                success: function() {
+                    
+                    session.answer({
+                        success: function(answer) {
+                            //console.log(answer);
+                            console.log(session.format_answer(answer));
+                            const response = answer.lookup('Message');
+                            //console.log(response);
+                            axios.post('http://127.0.0.1:5000/', {
+                            testData: response
+                                })
+                            ;
+                        },
+                        fail: function() {console.log("fail Answer") },
+                        error: function(err) {console.log(err); console.log("fail")},
+                        limit: function() { }
+                    });
 
+                    
+                
+
+                },
+                error: function(err) { console.log("ko") }
+            });
+
+
+         },
+        error: function(err) { console.log(err) }
+    }
+    );
+
+
+
+
+
+
+})
 
 app.post('/API/play',jsonParser, cors(),  function(req, res) {
 
@@ -165,7 +213,7 @@ app.post('/API/testAdd',jsonParser, cors(),  function(req, res) {
                     
                     session.answer({
                         success: function(answer) {
-                            console.log(session.format_answer(answer)); // X = salad ;
+                            console.log(session.format_answer(answer)); 
                             ;
                         },
                         fail: function() {console.log("fail Answer") },
