@@ -3,12 +3,14 @@
 
 {% block playerDialogBox %}
 
-<div id="playerDialogBox">
-
-    <label for="fname">Enter you question : </label>
-    <input type="text" id="askedQuestion" name="fname"><br><br>
-    <input type="submit" value="Submit" onclick="playCard('1', '1')">
-
+<div id="tbot">
+    <p><strong>Bonjour, je suis TBot, le bot explicateur du Tour de France.
+        En quoi puis-je vous aider ?</strong></p>
 </div>
+    <label for="question"><strong>Vous :</strong></label>
+    <input type="text" id="question" name="question" autocomplete="off" />
+    <button type="submit" class="btn btn-primary" onclick="bot()">Submit</button>
+
+
 
 {% endblock %}

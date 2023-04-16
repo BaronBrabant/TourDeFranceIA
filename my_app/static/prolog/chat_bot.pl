@@ -20,14 +20,20 @@
 /* --------------------------------------------------------------------- */
 
 
-
+intersection([], _, []).
+intersection([X|Xs], Ys, [X|Zs]) :-
+    member(X, Ys),
+    intersection(Xs, Ys, Zs).
+intersection([X|Xs], Ys, Zs) :-
+    \+ member(X, Ys),
+    intersection(Xs, Ys, Zs).
 liste_mot_cle([case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
-select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=["celui qui a le plus de carte"];
-member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=["chaque equipe a 3 joueurs"];
-member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=["oui, il est permis de depasser par le bas-cote de la route pour autant que le coureur arrive sur une case non occupee. si ce n’est pas le cas, le coureur chute et entraine dans sa chute le groupe de coureurs qu’il voulait depasser"];
+select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=["celui,qui, a, le, plus, de, carte"];
+member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs"];
+member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,case, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu’il, voulait ,depasser"];
 
 %Puis-je deplacer un coureur sur une case occupee par un autre coureur ?
 member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=["Non"]
@@ -42,7 +48,6 @@ produire_reponse(L,Answer):-find_mot_cle(L,Motcletrouve),select_answer(Motcletro
 produire_reponse([fin],L1) :-
     L1 = ['merci de avoir consulte'], !.
 */
-§
 produire_reponse([fin],L1) :-
     L1 = [merci, de, m, '\'', avoir, consulte], !.
 
@@ -56,7 +61,7 @@ produire_reponse(L,Rep) :-
 
 produire_reponse(_,[S1,S2]) :-
     S1 = " Je ne sais pas. ",
-    S2 = "Les étudiants vont m'aider, vous le verrez".
+    S2 = "Les étudiants vont m aider, vous le verrez".
 
 
 match_pattern(Pattern,Lmots) :-
@@ -100,13 +105,13 @@ mclef(quipe,5).
 
 % --------------------------------------------------------------- %
 
-regle_rep(commence,1,
+/*regle_rep(commence,1,
  [ qui, commence, le, jeu ],
- [ "c'est au joueur ayant la plus haute carte secondes de commencer." ] ).
+ [ "c\'est au joueur ayant la plus haute carte secondes de commencer." ] ).*/
 
 % ----------------------------------------------------------------% 
 
-regle_rep(equipe,5,
+/*regle_rep(equipe,5,
   [ [ combien ], 3, [ coureurs], 5, [ equipe ] ],
   [ chaque, equipe, compte, X, coureurs ]) :- 
 
@@ -117,7 +122,7 @@ regle_rep(quipe,5,
   [ "chaque equipe compte ", X_in_chars, "coureurs" ]) :- 
 
        nb_coureurs(X),
-       write_to_chars(X,X_in_chars).
+       write_to_chars(X,X_in_chars).*/
 
 write_to_chars(3,"3 ").
 
@@ -125,7 +130,7 @@ write_to_chars(3,"3 ").
 
 /* --------------------------------------------------------------------- */
 /*                                                                       */
-/*          CONVERSION D'UNE QUESTION DE L'UTILISATEUR EN                */
+/*                          */
 /*                        LISTE DE MOTS                                  */
 /*                                                                       */
 /* --------------------------------------------------------------------- */
@@ -197,7 +202,7 @@ extract_word([C|Chars],Rest,[C|RestOfWord]) :-
     extract_word_aux(Type,Chars,Rest,RestOfWord).
 
     extract_word_aux(special,Rest,Rest,[]) :- !.
-% if Char is special, don't read more chars.
+% if Char is special, don\'t read more chars.
 
 extract_word_aux(Type,[C|Chars],Rest,[C|RestOfWord]) :-
     my_char_type(C,Type), !,
@@ -322,11 +327,11 @@ flatten_strings_in_sentences([W|T],S) :-
     append(L1,L2,S).
 
 % Pour SWI-Prolog
-string_as_list(W,L) :- string_to_list(W,L).
+%string_as_list(W,L) :- string_to_list(W,L).
 
 
 % Pour tau-Prolog
-% string_as_list(W,W).
+string_as_list(W,W).
 
 
 /*    /!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\/!\    */

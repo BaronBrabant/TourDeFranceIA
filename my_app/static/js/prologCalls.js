@@ -106,6 +106,28 @@ function checkNewRider(){
     
 
 }
+function bot(){
+    var data={}
+    
+    var userInput = document.getElementById("question").value;
+    console.log(userInput)
+    document.getElementById("tbot").innerHTML +="<p><strong>Vous : </strong>" + userInput + "</p>";
+            data.query=userInput.toLowerCase().split(" ");
+            jQuery.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:3000/API/chatbot",
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    var botResponse = response.testData;
+                    document.getElementById("tbot").innerHTML +="<p><strong>Tbot : </strong>" + botResponse + "</p>";
+                },
+                error: function(response) {
+                    console.log("Erreur :");
+                }
+            });
+            $("#question").val(""); // Vider le champ de saisie
+}
 
 /*
 session.consult("../prolog/test.pl", {
