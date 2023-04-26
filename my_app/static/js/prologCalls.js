@@ -58,6 +58,8 @@ function playCard(Team){
 
     Position, LaneIn, Movement
     */
+   console.log("this is the team")
+   console.log(Team)
 
     var Card = document.getElementById("cardChosen").value;
     $("#cardChosen").val("");

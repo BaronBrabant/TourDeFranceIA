@@ -5,4 +5,5 @@ from config import DevelopmentConfig
 
 app = Flask(__name__)
 CORS(app)
+#app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config.from_object(DevelopmentConfig)
