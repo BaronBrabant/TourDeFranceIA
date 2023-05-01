@@ -48,6 +48,27 @@
 
     <!--<script src="../static/js/movement.js"></script>-->
     <script src="../static/js/prologCalls.js"></script>
+    <script>
+        $(document).ready(function pollChanges(){
+
+                
+                setTimeout(function(){
+                    console.log("polling")
+                    checkRefresh()
+                }, 1000);
+
+            
+        }
+        )
+
+        function checkRefresh(){
+            console.log("inside log call")
+            jQuery.ajax({
+                type : 'POST',
+                url : "http://127.0.0.1:5000/checkDataChange"
+            })
+        }
+    </script>
 
 </body>
 </html>

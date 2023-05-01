@@ -138,6 +138,8 @@ function bot(){
             $("#question").val(""); // Vider le champ de saisie
 }
 
+
+
 /*
 session.consult("../prolog/test.pl", {
     success: function() {console.log("ok") },

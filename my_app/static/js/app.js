@@ -195,8 +195,9 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
     console.log(body);
     console.log(" this is the body");
     //console.log(req);
-
+    res.json({message: "prolog is called"});
     getLast(body.team, body.card);
+    
 
 
     
@@ -499,7 +500,7 @@ function getCyclists(){
                                 listToSend.push(cylistData);
                             }
 
-                            axios.post('http://127.0.0.1:5000/', {
+                            axios.post('http://127.0.0.1:5000/API/prolog/game/response', {
                                 "allCyclists": JSON.stringify(listToSend)
                                 });
                             ;

@@ -133,17 +133,20 @@ def saveRatio():
 @tdf_routes.route('/API/game', methods = ['GET', 'POST'])
 def callProlog():
    info = request.get_data()
-
    info = json.loads(info)
    print(info)
    call = requests.post('http://127.0.0.1:3000/API/play', json = info)
+   print(call)
+
+   #req = requests.get('http://127.0.0.1:3000/API/play')
+
    
    return ('', 204)
 
 @tdf_routes.route('/API/prolog/game/response', methods = ['GET', 'POST'])
 def responseProlog():
 
-
+   print("this is the call to the response function in flask")
    info = request.get_data()
    info = json.loads(info)
 
@@ -160,7 +163,8 @@ def responseProlog():
 
    savePlayerState(positionEveryone)
 
-   return redirect(url_for('/'))
+   return ('', 200)
+   #return redirect(url_for('my_blueprint.main'))
 
 @tdf_routes.route('/API/prolog/chatbot', methods = ['GET', 'POST'])
 def callChatbot():
@@ -169,6 +173,41 @@ def callChatbot():
    info = json.loads(info)
    print(info)
    return jsonify(info)
+
+@tdf_routes.route('/checkDataChange', methods = ['GET', 'POST'])
+def checkDataChange():
+
+   print("this is polled")
+   if not os.path.exists("saveGameStateLastVersion.txt"):
+      file1 = open("saveGameState.txt", "r")
+      file2 = open("saveGameStateLastVersion.txt", "w")
+
+      file2.write(file1.read())
+      file1.close()
+      file2.close()
+   else:
+      file1 = open("saveGameState.txt", "r")
+      file2 = open("saveGameStateLastVersion.txt", "r")
+
+      positionCurrent = file1.read()
+      positionLastVersion = file2.read()
+
+      positionCurrentDic = ast.literal_eval(positionCurrent)
+      positionLastVersionDic = ast.literal_eval(positionLastVersion)
+
+      file1.close()
+      file2.close()
+
+      if positionCurrentDic != positionLastVersionDic:
+         fileToChange = open("saveGameStateLastVersion.txt", "w")
+
+         fileToChange.write(positionCurrent)
+         fileToChange.close()
+
+         return redirect(url_for('my_blueprint.main'))
+      
+   return ('', 304)
+   
 
 def loadRatiosFromFile():
    fil = open("saveRatioFirstLegV2.txt", "r")
