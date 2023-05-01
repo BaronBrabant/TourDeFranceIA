@@ -46,6 +46,7 @@ def main():
    turn = (turn+1)%4
    responseBot = " "
 
+   """
    if request.method == "POST":
 
       info = request.get_data()
@@ -70,7 +71,7 @@ def main():
          savePlayerState(positionEveryone)
       
       return redirect(url_for('my_blueprint.main'))
-      """
+  
       f = open("saveRatioFirstLeg.txt", "w")
  
       listRatio = request.form["data"]
@@ -129,12 +130,14 @@ def saveRatio():
    return ('', 204)
 
 
-@tdf_routes.route('/API/prolog/game', methods = ['GET', 'POST'])
+@tdf_routes.route('/API/game', methods = ['GET', 'POST'])
 def callProlog():
    info = request.get_data()
 
-   call = requests.post('http://127.0.0.1:3000/API/play', data = info)
+   info = json.loads(info)
    print(info)
+   call = requests.post('http://127.0.0.1:3000/API/play', json = info)
+   
    return ('', 204)
 
 @tdf_routes.route('/API/prolog/game/response', methods = ['GET', 'POST'])
@@ -200,17 +203,5 @@ def saveGameState(gameState):
    file.close()
 
 
-@tdf_routes.route('/saveRatio', methods = ['GET', 'POST'])
-def saveRatio():
 
-  
-   f = open("saveRatioFirstLegV2.txt", "w")
-
-   listRatio = request.form["data"]
-   listRatio = json.loads(listRatio)
-   print(listRatio)
-   f.write(str(listRatio))
-   f.close()
-
-   return ('', 204)
       

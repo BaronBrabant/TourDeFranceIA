@@ -83,7 +83,6 @@ function playCard(Team){
         contentType: "application/json; charset=utf-8",
       });
 
-
 }
 
 

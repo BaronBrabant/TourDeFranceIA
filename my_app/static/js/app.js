@@ -189,9 +189,12 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
 
     
     //console.log(res);
+    //console.log(req.data)
     var body = req.body;
     
     console.log(body);
+    console.log(" this is the body");
+    //console.log(req);
 
     getLast(body.team, body.card);
 
