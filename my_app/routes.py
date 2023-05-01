@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
+import requests
 from flask_login import login_user, logout_user, login_required, current_user, login_remembered
 from .forms import *
 from .models import *
@@ -113,6 +114,59 @@ def main():
    return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap)
 
 
+@tdf_routes.route('/saveRatio', methods = ['GET', 'POST'])
+def saveRatio():
+
+
+   f = open("saveRatioFirstLegV2.txt", "w")
+
+   listRatio = request.form["data"]
+   listRatio = json.loads(listRatio)
+   print(listRatio)
+   f.write(str(listRatio))
+   f.close()
+
+   return ('', 204)
+
+
+@tdf_routes.route('/API/prolog/game', methods = ['GET', 'POST'])
+def callProlog():
+   info = request.get_data()
+
+   call = requests.post('http://127.0.0.1:3000/API/play', data = info)
+   print(info)
+   return ('', 204)
+
+@tdf_routes.route('/API/prolog/game/response', methods = ['GET', 'POST'])
+def responseProlog():
+
+
+   info = request.get_data()
+   info = json.loads(info)
+
+   print(info)
+
+   info = ast.literal_eval(info["allCyclists"])
+   print(info)
+
+   info = sorted(info, key = lambda x: x[4])
+
+   positionEveryone = []
+   for cyclist in info:
+      positionEveryone.append([cyclist[0], cyclist[1]])
+
+   savePlayerState(positionEveryone)
+
+   return redirect(url_for('/'))
+
+@tdf_routes.route('/API/prolog/chatbot', methods = ['GET', 'POST'])
+def callChatbot():
+
+   info = request.get_data()
+   info = json.loads(info)
+   print(info)
+   return jsonify(info)
+
 def loadRatiosFromFile():
    fil = open("saveRatioFirstLegV2.txt", "r")
    positions = fil.read()
@@ -138,6 +192,7 @@ def savePlayerState(playerState):
    file = open("savePlayerState.txt", "w")
    file.write(str(playerState))
    file.close()
+
 
 def saveGameState(gameState):
    file = open("saveGameState.txt", "w")

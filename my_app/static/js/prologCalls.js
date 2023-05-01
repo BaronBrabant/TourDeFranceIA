@@ -58,8 +58,6 @@ function playCard(Team){
 
     Position, LaneIn, Movement
     */
-   console.log("this is the team")
-   console.log(Team)
 
     var Card = document.getElementById("cardChosen").value;
     $("#cardChosen").val("");
@@ -80,14 +78,11 @@ function playCard(Team){
 
     jQuery.ajax({
         type : 'POST',
-        url : "http://127.0.0.1:3000/API/play",
+        url : "http://127.0.0.1:5000/API/game",
         data : JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
-        success: function(html){
-            wilocation.reload();
-        }
       });
-    
+
 
 }
 
