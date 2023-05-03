@@ -50,12 +50,13 @@
     <script src="../static/js/prologCalls.js"></script>
     <script>
         $(document).ready(function pollChanges(){
-
+            var intervalId = window.setInterval(function(){
+            // call your function here
+            console.log("polling")
+            checkRefresh()
+            }, 1000);
                 
-                setTimeout(function(){
-                    console.log("polling")
-                    checkRefresh()
-                }, 1000);
+                
 
             
         }
