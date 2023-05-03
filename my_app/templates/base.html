@@ -66,8 +66,11 @@
             jQuery.ajax({
                 type : 'POST',
                 url : "http://127.0.0.1:5000/checkDataChange",
-                success: function(){  
-                    window.location.reload();  
+                success: function(result){  
+
+                    if(result != "false"){
+                        window.location.reload();  
+                    }
                 },
                 error: function() { 
                     console.log("no change")

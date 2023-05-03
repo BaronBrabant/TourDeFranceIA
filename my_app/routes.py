@@ -216,7 +216,7 @@ def checkDataChange():
 
          return redirect(url_for('my_blueprint.main'))
       
-   return ('', 418)
+   return jsonify("false")
    
 
 def loadRatiosFromFile():
