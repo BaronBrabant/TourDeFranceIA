@@ -86,15 +86,15 @@ def main():
    positionEveryone = loadPlayerState()
    print(positionEveryone)
 
-   positionEveryone[0][0]
+
 
    positionPlayerOnMap = []
+   
+   print(positions)
 
-   positionCyc =[2, 1]
-   print(positions[positionCyc[0]][positionCyc[1]][0])
-   print(positions[positionCyc[0]][positionCyc[1]][1])
 
    for positionCyc in positionEveryone:
+      print(positionCyc)
       if positionCyc[0] == 0:
          positionPlayerOnMap.append([positions[0][0], 0.48])
       else:
@@ -106,10 +106,9 @@ def main():
    print(turn)
    teamPlayingCountry = teamCountry[turn]
 
-   
- 
 
    saveGameState({"deck": deck, "teams": teams, "turn": turn})
+
    #savePlayerState(positionEveryone)
 
    return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap)
@@ -150,17 +149,22 @@ def responseProlog():
    info = request.get_data()
    info = json.loads(info)
 
-   print(info)
+   #print(info)
 
    info = ast.literal_eval(info["allCyclists"])
-   print(info)
+   ##print(info)
 
    info = sorted(info, key = lambda x: x[4])
+   #print(info)
 
    positionEveryone = []
    for cyclist in info:
-      positionEveryone.append([cyclist[0], cyclist[1]])
+      if cyclist[1] == 0:
+         positionEveryone.append([cyclist[0], 0])
+      else:
+         positionEveryone.append([cyclist[0], cyclist[1]-1])
 
+   #print(positionEveryone)
    savePlayerState(positionEveryone)
 
    return ('', 200)
@@ -178,16 +182,16 @@ def callChatbot():
 def checkDataChange():
 
    print("this is polled")
-   if not os.path.exists("saveGameStateLastVersion.txt"):
-      file1 = open("saveGameState.txt", "r")
-      file2 = open("saveGameStateLastVersion.txt", "w")
+   if not os.path.exists("savePLayerStateLastVersion.txt"):
+      file1 = open("savePlayerState.txt", "r")
+      file2 = open("savePLayerStateLastVersion.txt", "w")
 
       file2.write(file1.read())
       file1.close()
       file2.close()
    else:
-      file1 = open("saveGameState.txt", "r")
-      file2 = open("saveGameStateLastVersion.txt", "r")
+      file1 = open("savePlayerState.txt", "r")
+      file2 = open("savePLayerStateLastVersion.txt", "r")
 
       positionCurrent = file1.read()
       positionLastVersion = file2.read()
@@ -197,16 +201,22 @@ def checkDataChange():
 
       file1.close()
       file2.close()
+      
+      print(positionCurrentDic)
+      print(positionLastVersionDic)
+      
 
       if positionCurrentDic != positionLastVersionDic:
-         fileToChange = open("saveGameStateLastVersion.txt", "w")
+         print("this was changed here")
+         
+         fileToChange = open("savePLayerStateLastVersion.txt", "w")
 
          fileToChange.write(positionCurrent)
          fileToChange.close()
 
          return redirect(url_for('my_blueprint.main'))
       
-   return ('', 304)
+   return ('', 418)
    
 
 def loadRatiosFromFile():
@@ -220,12 +230,14 @@ def loadRatiosFromFile():
 def loadGameState():
    file = open("saveGameState.txt", "r")
    gameState = file.read()
+   file.close()
 
    return gameState
 
 def loadPlayerState():
    fil = open("savePlayerState.txt", "r")
    positions = fil.read()
+   fil.close()
    positions = ast.literal_eval(positions)
 
    return positions

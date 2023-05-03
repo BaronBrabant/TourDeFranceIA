@@ -49,15 +49,14 @@
     <!--<script src="../static/js/movement.js"></script>-->
     <script src="../static/js/prologCalls.js"></script>
     <script>
+            
+
         $(document).ready(function pollChanges(){
             var intervalId = window.setInterval(function(){
             // call your function here
             console.log("polling")
             checkRefresh()
             }, 1000);
-                
-                
-
             
         }
         )
@@ -66,7 +65,13 @@
             console.log("inside log call")
             jQuery.ajax({
                 type : 'POST',
-                url : "http://127.0.0.1:5000/checkDataChange"
+                url : "http://127.0.0.1:5000/checkDataChange",
+                success: function(){  
+                    window.location.reload();  
+                },
+                error: function() { 
+                    console.log("no change")
+                }    
             })
         }
     </script>
