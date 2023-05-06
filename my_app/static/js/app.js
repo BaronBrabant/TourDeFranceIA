@@ -135,6 +135,7 @@ app.post('/API/test',jsonParser, cors(),  function(req, res) {
       testData: 'hello world from node code'
     })
 })
+
 app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
     var body=req.body;
     console.log(body);
@@ -282,6 +283,18 @@ app.listen(port, hostname, () => {
 console.log(`Server running at http://${hostname}:${port}/`);
 });
 
+app.get('/API/init',jsonParser, cors(),  function(req, res) {
+
+    console.log("init function called");
+
+    session.consult("../prolog/game.pl", {
+        success: function() {
+            console.log("successful consult");
+            res.send("successful consult");
+         },
+        error: function(err) { console.log(err) }
+    });
+})
 
 
 function updateCyclist() {
@@ -321,40 +334,37 @@ async function getLast(team, card) {
     //getLast(1, Id), getPosition(Id, Pos, Lane). this works in the sandbox but not here whyyyyyyyyyyyyyyyy
     var testLast = "getLast("+team+", Id), getPosition(n1, Position, Lane).";
 
-    session.consult("../prolog/game.pl", {
-        success: function() {
+    
             
-            session.query(testLast, {  
-                success: function(goal) {
+    session.query(testLast, {  
+        success: function(goal) {
+            
+            session.answer({
+                success: function(answer) {
+                    console.log(answer.lookup("Id").id);
+                    console.log(answer.lookup("Position").value);
+                    play([answer.lookup("Position").value, answer.lookup("Lane").value, answer.lookup("Id").id], card); // X = salad ;
                     
-                    session.answer({
-                        success: function(answer) {
-                            console.log(answer.lookup("Id").id);
-                            console.log(answer.lookup("Position").value);
-                            play([answer.lookup("Position").value, answer.lookup("Lane").value, answer.lookup("Id").id], card); // X = salad ;
-                            
-                            //this is the second request
-                           
-                            //return idResponse;
-                        },
-                        fail: function() {return false;},
-                        error: function(err) {return "error"},
-                        limit: function() {}
-                    });
-
-                   
+                    //this is the second request
+                    
+                    //return idResponse;
                 },
-                error: function(err) { console.log("error query") }
+                fail: function() {return false;},
+                error: function(err) {return "error"},
+                limit: function() {}
             });
 
             
-         },
-        error: function(err) { console.log(err) }
+        },
+        error: function(err) { console.log("error query") }
     });
+
+            
+}
 
 
     //nextMove(Position, _ , Movement, NewPos, Lane, CurveId)
-}
+
 
 function play(pos, card){
     
@@ -363,36 +373,29 @@ function play(pos, card){
     var call = "nextMove(" + pos[0] + "," + pos[1] + "," + card + ", NewPos, NewLane, NewCurveId).";
     
 
-    session.consult("../prolog/game.pl", {
-        success: function() {
             
-            session.query(call, {  
-                success: function(goal) {
-                    
-                    session.answer({
-                        success: function(answer) {
-                            changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
-                            ;
-                        },
-                        fail: function() {
-                            axios.post('http://127.0.0.1:5000/', {
-                                testData: 'Play returned false'
-                                })
-                        },
-                        error: function(err) {console.log(err)},
-                        limit: function() { }
-                    });
-                
-
+    session.query(call, {  
+        success: function(goal) {
+            
+            session.answer({
+                success: function(answer) {
+                    console.log("so far so good in play function");
+                    changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
+                    ;
                 },
-                error: function(err) { console.log("error query") }
+                fail: function() {
+                    axios.post('http://127.0.0.1:5000/', {
+                        testData: 'Play returned false'
+                        })
+                },
+                error: function(err) {console.log(err)},
+                limit: function() { }
             });
+        
 
-
-         },
-        error: function(err) { console.log(err) }
+        },
+        error: function(err) { console.log("error query") }
     });
-
   
     //nextMove(Position, _ , Movement, NewPos, Lane, CurveId)
 
@@ -400,7 +403,6 @@ function play(pos, card){
     //  testData: 'The next move was calculated'
     //})
     
-
 }
 
 
@@ -423,105 +425,88 @@ function changeCyclistValues(answ){
     //answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id
     var changeValues = "retract(cyclist(_, _, _,"+answ[5]+",_)), asserta(cyclist("+answ[2]+","+answ[3]+","+answ[4]+","+answ[5]+","+team+")).";
 
-    session.consult("../prolog/game.pl", {
-        success: function() {
-            
-            session.query(changeValues, {  
-                success: function(goal) {
-                    
-                    session.answer({
-                        success: function(answer) {
-                            console.log(session.format_answer(answer)); // X = salad ;
-                            getCyclists();
-                            //testAdd(answer);
-                            ;
-                        },
-                        fail: function() {
-                            axios.post('http://127.0.0.1:5000/', {
-                                testData: 'Play returned false'
-                                })
-                        },
-                        error: function(err) {console.log(err)},
-                        limit: function() { }
-                    });
-                
+    
+    session.query(changeValues, {
 
+        success: function(goal) {
+            session.answer({
+                success: function(answer) {
+                    console.log("so far so good in function to change cyclist values");
+                    getCyclists();
+                    //testAdd(answer);
+                    ;
                 },
-                error: function(err) { console.log("error query") }
-            });
-
-
-         },
-        error: function(err) { console.log(err) }
-    });
-
+                fail: function() {
+                    axios.post('http://127.0.0.1:5000/', {
+                        testData: 'Play returned false'
+                        })
+                },
+                error: function(err) {console.log(err)},
+                limit: function() { }
+            }
+            );
+            },
+        error: function(err) { console.log("error query in changing of values") }
+    })
 }
 
 function getCyclists(){
 
     var changeValues = "bagof(cyclist(A,B,C,D,E), clause(cyclist(A,B,C,D,E), _), Bag).";
 
-    session.consult("../prolog/game.pl", {
-        success: function() {
             
-            session.query(changeValues, {  
-                success: function(goal) {
+    session.query(changeValues, {  
+        success: function(goal) {
+            
+            session.answer({
+                success: function(answer) {
+                    allData0 = answer.lookup("Bag").args[0];
+                    allData1 = answer.lookup("Bag").args[1];
+                    allData11 = answer.lookup("Bag").args[1].args[0];
+                    allData12 = answer.lookup("Bag").args[1].args[1];
+                    allData121 = answer.lookup("Bag").args[1].args[1].args[0];
+                    allData122 = answer.lookup("Bag").args[1].args[1].args[1];
                     
-                    session.answer({
-                        success: function(answer) {
-                            allData0 = answer.lookup("Bag").args[0];
-                            allData1 = answer.lookup("Bag").args[1];
-                            allData11 = answer.lookup("Bag").args[1].args[0];
-                            allData12 = answer.lookup("Bag").args[1].args[1];
-                            allData121 = answer.lookup("Bag").args[1].args[1].args[0];
-                            allData122 = answer.lookup("Bag").args[1].args[1].args[1];
-                            
-                            var listAllCyclist = [];
-                            var lastCylist;
-                            for (let i = 0; i < 12; i++){
-                                if (i == 0){
-                                    lastCylist = answer.lookup("Bag");
-                                    listAllCyclist.push(lastCylist);
-                                }
-                                lastCylist = lastCylist.args[1];
-                                listAllCyclist.push(lastCylist);
-                            } 
+                    var listAllCyclist = [];
+                    var lastCylist;
+                    for (let i = 0; i < 12; i++){
+                        if (i == 0){
+                            lastCylist = answer.lookup("Bag");
+                            listAllCyclist.push(lastCylist);
+                        }
+                        lastCylist = lastCylist.args[1];
+                        listAllCyclist.push(lastCylist);
+                    } 
 
-                            var listObjectCyclist = [];
+                    var listObjectCyclist = [];
 
-                            for (let i = 0; i < 12; i++){
-                                listObjectCyclist.push(listAllCyclist[i].args[0]);
-                            }
+                    for (let i = 0; i < 12; i++){
+                        listObjectCyclist.push(listAllCyclist[i].args[0]);
+                    }
 
-                            var cylistData;
-                            var listToSend = [];
-                            for (let i = 0; i < 12; i++){
-                                var cylistData = [listObjectCyclist[i].args[0].value, listObjectCyclist[i].args[1].value, listObjectCyclist[i].args[2].id, listObjectCyclist[i].args[3].id, listObjectCyclist[i].args[4].value];
-                                listToSend.push(cylistData);
-                            }
+                    var cylistData;
+                    var listToSend = [];
+                    for (let i = 0; i < 12; i++){
+                        var cylistData = [listObjectCyclist[i].args[0].value, listObjectCyclist[i].args[1].value, listObjectCyclist[i].args[2].id, listObjectCyclist[i].args[3].id, listObjectCyclist[i].args[4].value];
+                        listToSend.push(cylistData);
+                    }
 
-                            axios.post('http://127.0.0.1:5000/API/prolog/game/response', {
-                                "allCyclists": JSON.stringify(listToSend)
-                                });
-                            ;
-                        },
-                        fail: function() {
-                            axios.post('http://127.0.0.1:5000/', {
-                                testData: 'Play returned false'
-                                })
-                        },
-                        error: function(err) {console.log(err)},
-                        limit: function() { }
-                    });
-                
-
+                    axios.post('http://127.0.0.1:5000/API/prolog/game/response', {
+                        "allCyclists": JSON.stringify(listToSend)
+                        });
+                    ;
                 },
-                error: function(err) { console.log("error query") }
+                fail: function() {
+                    axios.post('http://127.0.0.1:5000/', {
+                        testData: 'Play returned false'
+                        })
+                },
+                error: function(err) {console.log(err)},
+                limit: function() { }
             });
+        
 
-
-         },
-        error: function(err) { console.log(err) }
+        },
+            error: function(err) { console.log("error query") }
     });
-
 }

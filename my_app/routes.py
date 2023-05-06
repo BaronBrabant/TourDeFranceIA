@@ -18,8 +18,9 @@ tdf_routes = Blueprint('my_blueprint', __name__)
 """
 MainPage with the list of all the jokes
 """
-@tdf_routes.route('/', methods = ['GET', 'POST'])
-def main():
+@tdf_routes.route('/', defaults={'increaseTurn' : False}, methods = ['GET', 'POST'])
+@tdf_routes.route('/<increaseTurn>', methods = ['GET', 'POST'])
+def main(increaseTurn = False):
 
    
    if not os.path.exists("saveGameState.txt"):
@@ -27,12 +28,11 @@ def main():
       teams = [[] for _ in range(4)]
       deck = initiate_cards_deck()
       cards_distribution(deck, teams)
-      gameState = {"deck": deck, "teams": teams, "turn": -1}
+      gameState = {"deck": deck, "teams": teams, "turn": 0}
       saveGameState(gameState)
       positionEveryone = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
       savePlayerState(positionEveryone)
-
-      
+      call = requests.get('http://127.0.0.1:3000/API/init')
 
    gameState = loadGameState()
    gameState = gameState.replace("'", '"')
@@ -43,7 +43,8 @@ def main():
    teams = gameState["teams"]
    turn = gameState["turn"]
    
-   turn = (turn+1)%4
+   if increaseTurn:
+      turn = (turn+1)%4
    responseBot = " "
 
    """
@@ -84,17 +85,17 @@ def main():
 
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()
-   print(positionEveryone)
+   #print(positionEveryone)
 
 
 
    positionPlayerOnMap = []
    
-   print(positions)
+   #print(positions)
 
 
    for positionCyc in positionEveryone:
-      print(positionCyc)
+      #print(positionCyc)
       if positionCyc[0] == 0:
          positionPlayerOnMap.append([positions[0][0], 0.48])
       else:
@@ -102,7 +103,7 @@ def main():
 
    print(positionPlayerOnMap)
 
-   teamCountry = ["Belgium","Germany", "Netherlands", "Italy"]
+   teamCountry = ["Belgium","Netherlands", "Germany", "Italy"]
    print(turn)
    teamPlayingCountry = teamCountry[turn]
 
@@ -181,40 +182,42 @@ def callChatbot():
 @tdf_routes.route('/checkDataChange', methods = ['GET', 'POST'])
 def checkDataChange():
 
-   print("this is polled")
-   if not os.path.exists("savePLayerStateLastVersion.txt"):
-      file1 = open("savePlayerState.txt", "r")
-      file2 = open("savePLayerStateLastVersion.txt", "w")
+   #print("this is polled")
 
-      file2.write(file1.read())
-      file1.close()
-      file2.close()
-   else:
-      file1 = open("savePlayerState.txt", "r")
-      file2 = open("savePLayerStateLastVersion.txt", "r")
+   if os.path.exists("savePlayerState.txt"):
+      if not os.path.exists("savePLayerStateLastVersion.txt"):
+         file1 = open("savePlayerState.txt", "r")
+         file2 = open("savePLayerStateLastVersion.txt", "w")
 
-      positionCurrent = file1.read()
-      positionLastVersion = file2.read()
+         file2.write(file1.read())
+         file1.close()
+         file2.close()
+      else:
+         file1 = open("savePlayerState.txt", "r")
+         file2 = open("savePLayerStateLastVersion.txt", "r")
 
-      positionCurrentDic = ast.literal_eval(positionCurrent)
-      positionLastVersionDic = ast.literal_eval(positionLastVersion)
+         positionCurrent = file1.read()
+         positionLastVersion = file2.read()
 
-      file1.close()
-      file2.close()
-      
-      print(positionCurrentDic)
-      print(positionLastVersionDic)
-      
+         positionCurrentDic = ast.literal_eval(positionCurrent)
+         positionLastVersionDic = ast.literal_eval(positionLastVersion)
 
-      if positionCurrentDic != positionLastVersionDic:
-         print("this was changed here")
+         file1.close()
+         file2.close()
          
-         fileToChange = open("savePLayerStateLastVersion.txt", "w")
+         print(positionCurrentDic)
+         print(positionLastVersionDic)
+         
 
-         fileToChange.write(positionCurrent)
-         fileToChange.close()
+         if positionCurrentDic != positionLastVersionDic:
+            print("this was changed here")
+            
+            fileToChange = open("savePLayerStateLastVersion.txt", "w")
 
-         return redirect(url_for('my_blueprint.main'))
+            fileToChange.write(positionCurrent)
+            fileToChange.close()
+
+            return redirect(url_for('my_blueprint.main', increaseTurn = True))
       
    return jsonify("false")
    
