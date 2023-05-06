@@ -139,11 +139,9 @@ app.post('/API/test',jsonParser, cors(),  function(req, res) {
 app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
     var body=req.body;
     console.log(body);
-    const goal= ` 
-    produire_reponse([${body.query}],L_reponse),
-    convert_sentence(L_reponse, Message).
+    const goal= `produire_reponse([${body.query}],L_reponse),convert_sentence(L_reponse, Message).`;
     
-`;console.log(goal)
+    console.log(goal);
     session.consult("../prolog/chat_bot.pl",{
         success: function() {
             
@@ -156,7 +154,7 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
                             console.log(session.format_answer(answer));
                             const response = answer.lookup('Message');
                             //console.log(response);
-                            axios.post('http://127.0.0.1:5000/', {
+                            axios.post('http://127.0.0.1:5000//API/prolog/chatbot', {
                             testData: response
                                 })
                             ;
@@ -165,15 +163,9 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
                         error: function(err) {console.log(err); console.log("fail")},
                         limit: function() { }
                     });
-
-                    
-                
-
                 },
                 error: function(err) { console.log("ko") }
             });
-
-
          },
         error: function(err) { console.log(err) }
     }
@@ -331,8 +323,8 @@ function updateCyclist() {
 
 
 async function getLast(team, card) {
-    //getLast(1, Id), getPosition(Id, Pos, Lane). this works in the sandbox but not here whyyyyyyyyyyyyyyyy
-    var testLast = "getLast("+team+", Id), getPosition(n1, Position, Lane).";
+    //getLast(1, Id), getPosition(Id, Pos, Lane). 
+    var testLast = "getLast("+team+", Id), getPosition(Id, Position, Lane).";
 
     
             
@@ -379,7 +371,9 @@ function play(pos, card){
             
             session.answer({
                 success: function(answer) {
-                    console.log("so far so good in play function");
+                    console.log("so far so good in play function  these are the values:");
+                    console.log(pos[0]);
+                    console.log(answer.lookup("NewPos").value);
                     changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
                     ;
                 },

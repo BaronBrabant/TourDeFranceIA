@@ -32,12 +32,16 @@ def main(increaseTurn = False):
       saveGameState(gameState)
       positionEveryone = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
       savePlayerState(positionEveryone)
+      saveQuestionAsked(" ")
       call = requests.get('http://127.0.0.1:3000/API/init')
 
    gameState = loadGameState()
    gameState = gameState.replace("'", '"')
    gameState = json.loads(gameState)
 
+   saveQuestionAskedVar = loadQuestionAsked()
+   print(saveQuestionAskedVar)
+   print("This is the answer here")
 
    deck = gameState["deck"]
    teams = gameState["teams"]
@@ -112,7 +116,7 @@ def main(increaseTurn = False):
 
    #savePlayerState(positionEveryone)
 
-   return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap)
+   return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap, answerQuestion = saveQuestionAskedVar, responseBot = responseBot)
 
 
 @tdf_routes.route('/saveRatio', methods = ['GET', 'POST'])
@@ -177,13 +181,20 @@ def callChatbot():
    info = request.get_data()
    info = json.loads(info)
    print(info)
-   return jsonify(info)
+
+   responseBot = info['testData']['id']
+
+   saveQuestionAsked(responseBot)
+
+   return ('', 200)
+
 
 @tdf_routes.route('/checkDataChange', methods = ['GET', 'POST'])
 def checkDataChange():
 
    #print("this is polled")
 
+   #this checks if the game data (aka the position of the cyclist have changed)
    if os.path.exists("savePlayerState.txt"):
       if not os.path.exists("savePLayerStateLastVersion.txt"):
          file1 = open("savePlayerState.txt", "r")
@@ -218,6 +229,37 @@ def checkDataChange():
             fileToChange.close()
 
             return redirect(url_for('my_blueprint.main', increaseTurn = True))
+
+   #this checks if questions asked to the bot have changed
+   if os.path.exists("saveQuestionAsked.txt"):
+      if not os.path.exists("saveQuestionAskedLastVersion.txt"):
+         file1 = open("saveQuestionAsked.txt", "r")
+         file2 = open("saveQuestionAskedLastVersion.txt", "w")
+
+         file2.write(file1.read())
+         file1.close()
+         file2.close()
+      else:
+         file1 = open("saveQuestionAsked.txt", "r")
+         file2 = open("saveQuestionAskedLastVersion.txt", "r")
+
+         currentQuestion = file1.read()
+         lastQuestion = file2.read()
+
+         file1.close()
+         file2.close()
+         
+
+         if currentQuestion != lastQuestion:
+            print("this was changed here")
+            
+            fileToChange = open("saveQuestionAskedLastVersion.txt", "w")
+
+            fileToChange.write(currentQuestion)
+            fileToChange.close()
+
+            return redirect(url_for('my_blueprint.main'))
+
       
    return jsonify("false")
    
@@ -245,6 +287,13 @@ def loadPlayerState():
 
    return positions
 
+def loadQuestionAsked():
+   file = open("saveQuestionAsked.txt", "r")
+   questionAsked = file.read()
+   file.close()
+   
+   return questionAsked
+
 def savePlayerState(playerState):
    file = open("savePlayerState.txt", "w")
    file.write(str(playerState))
@@ -255,6 +304,12 @@ def saveGameState(gameState):
    file = open("saveGameState.txt", "w")
    file.write(str(gameState))
    file.close()
+
+def saveQuestionAsked(questionAsked):
+   file = open("saveQuestionAsked.txt", "w")
+   file.write(str(questionAsked))
+   file.close()
+
 
 
 
