@@ -35,8 +35,27 @@ window.addEventListener('click',
                 nb++;
             }
         }
+        else if (setNumber == 4){
+            if (nb%4==0){
+                console.log(ratios)
+                sendListBackend(ratios)
+                nb = 0;
+                ratios.push(set)
+                set = [];
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
+                set.push(vals);
+                nb++;
+            }
+            else {
+                let vals = [e.x/photo.clientWidth, e.y/photo.clientHeight];
+                set.push(vals);
+                nb++;
+            }
+        
+        }
         else {
             if (nb%2==0){
+                console.log(ratios)
                 sendListBackend(ratios)
                 nb = 0;
                 ratios.push(set)

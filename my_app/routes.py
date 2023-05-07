@@ -149,7 +149,7 @@ def saveGameState(gameState):
 def saveRatio():
 
   
-   f = open("saveRatioFirstLegV2.txt", "w")
+   f = open("saveRatio15.txt", "w")
 
    listRatio = request.form["data"]
    listRatio = json.loads(listRatio)
