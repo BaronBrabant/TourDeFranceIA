@@ -2,8 +2,8 @@ import random
 
 
 # list of all exchange case
-exchanges_places = [[13, 2, "n"], [14, 2, "n"], [18, 2, "n"], [20, 2, "n"], [20, 3, "n"], [22, 3, "n"], [26, 3, "D"], [27, 3, "D"], [30, 3, "n"], [32, 3, "n"], [36, 2, "n"], [46, 1, "n"], [46, 2, "n"], [61, 2, "n"], [62, 2, "n"], [71, 2, "n"], [72, 2, "n"], [81, 1, "n"], [81, 2, "n"], [85, 1, "n"], [85, 2, "n"], [86, 2, "n"], [89, 2, "B"], [90, 2, "B"]]
-   
+exchanges_places = [[13, 1, "n"], [14, 1, "n"], [18, 1, "n"], [20, 1, "n"], [20, 2, "n"], [22, 2, "n"], [26, 2, "d"], [27, 2, "d"], [30, 2, "n"], [32, 2, "n"], [36, 1, "n"], [46, 0, "n"], [46, 1, "n"], [61, 1, "n"], [62, 1, "n"], [71, 1, "n"], [72, 1, "n"], [81, 0, "n"], [81, 1, "n"], [85, 0, "n"], [85, 1, "n"], [86, 1, "n"], [89, 1, "b"], [90, 1, "b"]]
+chance_places = [[9, 0, "a"], [10, 0, "a"], [11, 0, "n"], [12, 0, "n"], [15, 1, "n"], [16, 1, "n"], [19, 2, "n"], [21, 2, "n"], [24, 0, "n"], [26, 0, "A"], [28, 0, "n"], [30, 0, "n"], [32, 0, "n"], [34, 0, "n"], [48, 0, "n"], [57, 1, "n"], [66, 0, "n"], [66, 1, "n"], [74, 0, "n"], [90, 1, "c"]]
 
 #Initiate the card deck
 def initiate_cards_deck():
@@ -54,7 +54,7 @@ exchange case:
 def exchange_case(cartes, equipes, indice, exchanged_card_list):
 
 
-    if equipes[indice].size < 3:
+    if len(equipes[indice]) < 3:
         for card in equipes[indice]:
             equipes[indice].remove(card)
         cards_distribution_to_a_team(cartes, equipes, indice , 3)

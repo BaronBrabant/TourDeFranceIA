@@ -134,13 +134,14 @@ def saveRatio():
    return ('', 204)
 
 
-@tdf_routes.route('/API/game', methods = ['GET', 'POST'])
+@tdf_routes.route('/API/game/', methods = ['GET', 'POST'])
 def callProlog():
    info = request.get_data()
    info = json.loads(info)
    print("player play:", info)
    call = requests.post('http://127.0.0.1:3000/API/play', json = info)
    print(call)
+   
 
    #req = requests.get('http://127.0.0.1:3000/API/play')
 
@@ -165,18 +166,23 @@ def responseProlog():
       else:
          positionEveryone.append([cyclist[0], cyclist[1]-1, cyclist[2], cyclist[3]])
    
-   # Exchanges cards from team deck if player on exchange case
+   savePlayerState(positionEveryone)
+   
    for cycl in positionEveryone:
       if info["player"] in cycl:
          currentCycl = cycl[:-1]
-   
-   #if currentCycl in exchanges_places:
+
+   # Exchanges cards from team deck if player on exchange case
+   if currentCycl in exchanges_places:
       # renew cards
-      #exchange_case()
+      # il faut adapter les fonction dans card.py
+      game = ast.literal_eval(loadGameState())
+      exchange_case(game["deck"], game["teams"], game["turn"], [game["teams"][game["turn"]][0], game["teams"][game["turn"]][1], game["teams"][game["turn"]][2]])
    
-      
-   #print(positionEveryone)
-   savePlayerState(positionEveryone)
+   # Chance case
+   if currentCycl in chance_places:
+      return jsonify({"card":lucky_case(), "player":currentCycl}), 201
+   
 
    return ('', 200)
    #return redirect(url_for('my_blueprint.main'))

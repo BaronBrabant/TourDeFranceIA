@@ -490,6 +490,12 @@ function getCyclists(){
                     axios.post('http://127.0.0.1:5000/API/prolog/game/response', {
                         "allCyclists": JSON.stringify(listToSend),
                         "player": currentPlayer
+                        }).then(function(response){
+                            if (response.status == 201) {
+                                console.log(response.data)
+                                play([response.data["player"][0], response.data["player"][1]+1, [response.data["player"][2]]], response.data["card"])
+                            }
+                            
                         });
                     ;
                 },
