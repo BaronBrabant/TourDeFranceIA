@@ -138,10 +138,40 @@ def saveRatio():
 def callProlog():
    info = request.get_data()
    info = json.loads(info)
-   print("player play:", info)
-   call = requests.post('http://127.0.0.1:3000/API/play', json = info)
-   print(call)
+
+   #Loading Game State
+   gameState = loadGameState()
+   gameState = gameState.replace("'", '"')
+   gameState = json.loads(gameState)
+
+   deck = gameState["deck"]
+   teams = gameState["teams"]
+   turn = gameState["turn"] 
+
+   cardPlayed = info['card']
+   print(cardPlayed)
+   #teamPlaying = info['team']
+   #print(teamPlaying)
+
+   print(teams[turn])
    
+   if(cardPlayed in teams[turn]):
+      teams[turn].remove(cardPlayed)
+      print("Card removed from the deck")
+      turn = (gameState["turn"] + 1) % 4 
+      call = requests.post('http://127.0.0.1:3000/API/play', json = info)
+      print(call)
+      
+      saveGameState({"deck": deck, "teams": teams, "turn": turn})
+   else:
+      print("Card not in the deck")
+
+
+   
+   
+   print("-----------------------")
+
+
 
    #req = requests.get('http://127.0.0.1:3000/API/play')
 
