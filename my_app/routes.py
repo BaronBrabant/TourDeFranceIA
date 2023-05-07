@@ -276,6 +276,8 @@ def loadRatiosFromFile():
 
       if (i != 0):
          allRatios.extend(positions[1:])
+      else:
+         allRatios.extend(positions)
       #print(positions)
    
    print(allRatios)
