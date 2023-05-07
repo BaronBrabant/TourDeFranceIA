@@ -271,12 +271,24 @@ def checkDataChange():
    
 
 def loadRatiosFromFile():
-   fil = open("saveRatioFirstLegV2.txt", "r")
-   positions = fil.read()
+   
+   allRatios = []
 
-   positions = ast.literal_eval(positions)
+   for i in range(13):
 
-   return positions
+      file = open("./ratios/saveRatio"+str(i)+".txt", "r")
+      positions = file.read()
+      positions = ast.literal_eval(positions)
+
+      if (i != 0):
+         allRatios.extend(positions[1:])
+      else:
+         allRatios.extend(positions)
+      #print(positions)
+
+   print(allRatios)
+
+   return allRatios
 
 def loadGameState():
    file = open("saveGameState.txt", "r")
