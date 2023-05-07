@@ -23,6 +23,7 @@ app.use(cors({
 //global variables
 var idGlobale = "";
 var posLaneSave = [];
+var currentPlayer = "";
 
 
 const http = require('http');
@@ -335,6 +336,7 @@ async function getLast(team, card) {
                 success: function(answer) {
                     console.log(answer.lookup("Id").id);
                     console.log(answer.lookup("Position").value);
+                    currentPlayer = answer.lookup("Id").id
                     play([answer.lookup("Position").value, answer.lookup("Lane").value, answer.lookup("Id").id], card); // X = salad ;
                     
                     //this is the second request
@@ -486,7 +488,8 @@ function getCyclists(){
                     }
 
                     axios.post('http://127.0.0.1:5000/API/prolog/game/response', {
-                        "allCyclists": JSON.stringify(listToSend)
+                        "allCyclists": JSON.stringify(listToSend),
+                        "player": currentPlayer
                         });
                     ;
                 },

@@ -8,22 +8,19 @@
 cyclist(0, 0, n, b1, 0).
 cyclist(0, 0, n, b2, 0).
 cyclist(0, 0, n, b3, 0).
-cyclist(0, 0, n, b4, 0).
 
 cyclist(0, 0, n, n1, 1).
 cyclist(0, 0, n, n2, 1).
 cyclist(0, 0, n, n3, 1).
-cyclist(0, 0, n, n4, 1).
 
 cyclist(0, 0, n, g1, 2).
 cyclist(0, 0, n, g2, 2).
 cyclist(0, 0, n, g3, 2).
-cyclist(0, 0, n, g4, 2).
 
 cyclist(0, 0, n, i1, 3).
 cyclist(0, 0, n, i2, 3).
 cyclist(0, 0, n, i3, 3).
-cyclist(0, 0, n, i4, 3).
+
 
 
 

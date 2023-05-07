@@ -16,7 +16,7 @@ if __name__ == '__main__':
             if database_exists:
                 os.remove(os.path.dirname(__file__)+ "/saveGameState.txt")
                 os.remove(os.path.dirname(__file__)+ "/savePlayerState.txt")
-                os.remove(os.path.dirname(__file__)+ "/savePlayerStateLastVersion.txt")
+                os.remove(os.path.dirname(__file__)+ "/savePLayerStateLastVersion.txt")
                 print("Removing existing database.")
     else:
         print("Loading existing database...")

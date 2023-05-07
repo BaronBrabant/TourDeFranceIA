@@ -6,7 +6,7 @@ from .models import *
 from .database import db
 import ast
 import os
-from .card import initiate_cards_deck, cards_distribution, cards_distribution_to_a_team, remove_card, lucky_case, exchange_case
+from .card import *
 import json
 
 
@@ -138,7 +138,7 @@ def saveRatio():
 def callProlog():
    info = request.get_data()
    info = json.loads(info)
-   print(info)
+   print("player play:", info)
    call = requests.post('http://127.0.0.1:3000/API/play', json = info)
    print(call)
 
@@ -151,24 +151,30 @@ def callProlog():
 def responseProlog():
 
    print("this is the call to the response function in flask")
-   info = request.get_data()
-   info = json.loads(info)
+   info = json.loads(request.get_data())
+   
+   info_cycl = ast.literal_eval(info["allCyclists"])
 
-   #print(info)
-
-   info = ast.literal_eval(info["allCyclists"])
-   ##print(info)
-
-   info = sorted(info, key = lambda x: x[4])
+   info_cycl = sorted(info_cycl, key = lambda x: x[4])
    #print(info)
 
    positionEveryone = []
-   for cyclist in info:
+   for cyclist in info_cycl:
       if cyclist[1] == 0:
-         positionEveryone.append([cyclist[0], 0])
+         positionEveryone.append([cyclist[0], 0, cyclist[2], cyclist[3]])
       else:
-         positionEveryone.append([cyclist[0], cyclist[1]-1])
-
+         positionEveryone.append([cyclist[0], cyclist[1]-1, cyclist[2], cyclist[3]])
+   
+   # Exchanges cards from team deck if player on exchange case
+   for cycl in positionEveryone:
+      if info["player"] in cycl:
+         currentCycl = cycl[:-1]
+   
+   #if currentCycl in exchanges_places:
+      # renew cards
+      #exchange_case()
+   
+      
    #print(positionEveryone)
    savePlayerState(positionEveryone)
 

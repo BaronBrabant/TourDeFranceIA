@@ -1,6 +1,10 @@
 import random  
 
 
+# list of all exchange case
+exchanges_places = [[13, 2, "n"], [14, 2, "n"], [18, 2, "n"], [20, 2, "n"], [20, 3, "n"], [22, 3, "n"], [26, 3, "D"], [27, 3, "D"], [30, 3, "n"], [32, 3, "n"], [36, 2, "n"], [46, 1, "n"], [46, 2, "n"], [61, 2, "n"], [62, 2, "n"], [71, 2, "n"], [72, 2, "n"], [81, 1, "n"], [81, 2, "n"], [85, 1, "n"], [85, 2, "n"], [86, 2, "n"], [89, 2, "B"], [90, 2, "B"]]
+   
+
 #Initiate the card deck
 def initiate_cards_deck():
     return [i for i in range(1, 13) for _ in range(8)]  #create a list with all cards
@@ -21,7 +25,7 @@ def cards_distribution(cartes, equipes):
 #distribue des cartes dans une equipe
 def cards_distribution_to_a_team(cartes, equipes, indice, card_quantity):
     
-    for _ in range(card_quantity):  # Distribuer 5 cartes à chaque équipe        
+    for _ in range(card_quantity):  # Distribuer card_quantity cartes à chaque équipe        
 
         carte = random.choice(cartes)  # Choisir une carte au hasard en tenant compte du nombre de cartes similaires encore en jeu             
         equipes[indice].append(carte)  # Ajouter la carte à l'équipe correspondante             
