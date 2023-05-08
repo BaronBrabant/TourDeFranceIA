@@ -34,8 +34,9 @@ liste_mot_cle([case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,co
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
 select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=[celui, qui, a, le, plus, de, carte];
 member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
-member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=["oui, il, est, permis, de, depasser, par ,le bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,case, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu’il, voulait ,depasser"];
-
+member(bonjour,Motcletrouve),Answer=[bonjour, que, puis-je, faire, pour, vous];
+member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu,il, voulait ,depasser];
+Answer = [je, ne, sais, pas];
 %Puis-je deplacer un coureur sur une case occupee par un autre coureur ?
 member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=["Non"]
 ).
