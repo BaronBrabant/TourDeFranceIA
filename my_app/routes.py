@@ -158,7 +158,7 @@ def callProlog():
    if(cardPlayed in teams[turn]):
       teams[turn].remove(cardPlayed)
       print("Card removed from the deck")
-      turn = (gameState["turn"] + 1) % 4 
+      
       call = requests.post('http://127.0.0.1:3000/API/play', json = info)
       print(call)
       
