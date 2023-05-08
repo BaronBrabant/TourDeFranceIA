@@ -48,8 +48,7 @@ def main(increaseTurn = False):
    teams = gameState["teams"]
    turn = gameState["turn"]
    
-   if increaseTurn:
-      turn = (turn+1)%4
+   
    responseBot = " "
 
    """
@@ -137,6 +136,9 @@ def saveRatio():
 
 @tdf_routes.route('/API/game/', methods = ['GET', 'POST'])
 def callProlog():
+   
+   
+   
    info = request.get_data()
    info = json.loads(info)
 
@@ -148,6 +150,9 @@ def callProlog():
    deck = gameState["deck"]
    teams = gameState["teams"]
    turn = gameState["turn"] 
+   
+   
+   
 
    cardPlayed = info['card']
    print(cardPlayed)
@@ -163,6 +168,7 @@ def callProlog():
       call = requests.post('http://127.0.0.1:3000/API/play', json = info)
       print(call)
       
+      turn = (turn+1)%4
       saveGameState({"deck": deck, "teams": teams, "turn": turn})
       
    else:
@@ -307,7 +313,7 @@ def checkDataChange():
             fileToChange.write(currentQuestion)
             fileToChange.close()
 
-            return redirect(url_for('my_blueprint.main'))
+            return redirect(url_for('my_blueprint.main', False))
 
       
    return jsonify("false")
