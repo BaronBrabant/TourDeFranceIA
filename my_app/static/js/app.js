@@ -493,7 +493,7 @@ function getCyclists(){
                         }).then(function(response){
                             if (response.status == 201) {
                                 console.log(response.data)
-                                play([response.data["player"][0], response.data["player"][1]+1, [response.data["player"][2]]], response.data["card"])
+                                play([response.data["player"][0], response.data["player"][1]+1, response.data["player"][3]], response.data["card"])
                             }
                             
                         });

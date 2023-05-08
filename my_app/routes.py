@@ -201,6 +201,7 @@ def responseProlog():
    for cycl in positionEveryone:
       if info["player"] in cycl:
          currentCycl = cycl[:-1]
+         fullCycl = cycl
 
    # Exchanges cards from team deck if player on exchange case
    if currentCycl in exchanges_places:
@@ -211,7 +212,7 @@ def responseProlog():
    
    # Chance case
    if currentCycl in chance_places:
-      return jsonify({"card":lucky_case(), "player":currentCycl}), 201
+      return jsonify({"card":lucky_case(), "player":fullCycl}), 201
    
 
    return ('', 200)
