@@ -153,16 +153,33 @@ def callProlog():
    #teamPlaying = info['team']
    #print(teamPlaying)
 
-   print(teams[turn])
+   print(teams[turn-1])
    
-   if(cardPlayed in teams[turn]):
-      teams[turn].remove(cardPlayed)
+   if turn != 0 and cardPlayed in teams[turn-1]:
+      teams[turn-1].remove(cardPlayed)
       print("Card removed from the deck")
       
       call = requests.post('http://127.0.0.1:3000/API/play', json = info)
       print(call)
       
       saveGameState({"deck": deck, "teams": teams, "turn": turn})
+   elif turn == 0 and cardPlayed in teams[3]:
+      teams[3].remove(cardPlayed)
+      print("Card removed from the deck")
+      
+      call = requests.post('http://127.0.0.1:3000/API/play', json = info)
+      print(call)
+      
+      saveGameState({"deck": deck, "teams": teams, "turn": turn})
+   elif turn == 3 and cardPlayed in teams[0]:
+      teams[0].remove(cardPlayed)
+      print("Card removed from the deck")
+      
+      call = requests.post('http://127.0.0.1:3000/API/play', json = info)
+      print(call)
+      
+      saveGameState({"deck": deck, "teams": teams, "turn": turn})
+      
    else:
       print("Card not in the deck")
 
