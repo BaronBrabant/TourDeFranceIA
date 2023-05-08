@@ -35,6 +35,9 @@ def main(increaseTurn = False):
       call = requests.get('http://127.0.0.1:3000/API/init')
 
    gameState = loadGameState()
+   gameState = gameState.replace("'", '"')
+   gameState = ast.literal_eval(gameState)
+
    
 
    saveQuestionAskedVar = loadQuestionAsked()
@@ -139,6 +142,8 @@ def callProlog():
 
    #Loading Game State
    gameState = loadGameState()
+   gameState = gameState.replace("'", '"')
+   gameState = json.loads(gameState)
 
    deck = gameState["deck"]
    teams = gameState["teams"]
@@ -221,7 +226,7 @@ def responseProlog():
    if currentCycl in exchanges_places:
       # renew cards
       # il faut adapter les fonction dans card.py
-      game = loadGameState()
+      game = ast.eval_literal(loadGameState())
       exchange_case(game["deck"], game["teams"], game["turn"], [game["teams"][game["turn"]][0], game["teams"][game["turn"]][1], game["teams"][game["turn"]][2]])
    
    # Chance case
@@ -281,7 +286,7 @@ def checkDataChange():
             print("this was changed here")
             
             #check if player passed a checkpoint
-            checkPlayerPassSprint(positionCurrentDic)
+            #checkPlayerPassSprint(positionCurrentDic)
             
             fileToChange = open("savePLayerStateLastVersion.txt", "w")
 
@@ -347,8 +352,6 @@ def loadRatiosFromFile():
 def loadGameState():
    file = open("saveGameState.txt", "r")
    gameState = file.read()
-   gameState = gameState.replace("'", '"')
-   gameState = json.loads(gameState)
    
    file.close()
 
