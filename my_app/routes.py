@@ -3,7 +3,6 @@ import requests
 from flask_login import login_user, logout_user, login_required, current_user, login_remembered
 from .forms import *
 from .models import *
-from .database import db
 import ast
 import os
 from .card import *
@@ -28,7 +27,7 @@ def main(increaseTurn = False):
       teams = [[] for _ in range(4)]
       deck = initiate_cards_deck()
       cards_distribution(deck, teams)
-      gameState = {"deck": deck, "teams": teams, "turn": 0}
+      gameState = {"deck": deck, "teams": teams, "turn": 0, "sprints":[False, False, False], "points":[]}
       saveGameState(gameState)
       positionEveryone = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
       savePlayerState(positionEveryone)
@@ -36,8 +35,7 @@ def main(increaseTurn = False):
       call = requests.get('http://127.0.0.1:3000/API/init')
 
    gameState = loadGameState()
-   gameState = gameState.replace("'", '"')
-   gameState = json.loads(gameState)
+   
 
    saveQuestionAskedVar = loadQuestionAsked()
    print(saveQuestionAskedVar)
@@ -141,8 +139,6 @@ def callProlog():
 
    #Loading Game State
    gameState = loadGameState()
-   gameState = gameState.replace("'", '"')
-   gameState = json.loads(gameState)
 
    deck = gameState["deck"]
    teams = gameState["teams"]
@@ -187,6 +183,7 @@ def responseProlog():
    info_cycl = ast.literal_eval(info["allCyclists"])
 
    info_cycl = sorted(info_cycl, key = lambda x: x[4])
+   
    #print(info)
 
    positionEveryone = []
@@ -207,7 +204,7 @@ def responseProlog():
    if currentCycl in exchanges_places:
       # renew cards
       # il faut adapter les fonction dans card.py
-      game = ast.literal_eval(loadGameState())
+      game = loadGameState()
       exchange_case(game["deck"], game["teams"], game["turn"], [game["teams"][game["turn"]][0], game["teams"][game["turn"]][1], game["teams"][game["turn"]][2]])
    
    # Chance case
@@ -265,6 +262,9 @@ def checkDataChange():
 
          if positionCurrentDic != positionLastVersionDic:
             print("this was changed here")
+            
+            #check if player passed a checkpoint
+            checkPlayerPassSprint(positionCurrentDic)
             
             fileToChange = open("savePLayerStateLastVersion.txt", "w")
 
@@ -330,6 +330,9 @@ def loadRatiosFromFile():
 def loadGameState():
    file = open("saveGameState.txt", "r")
    gameState = file.read()
+   gameState = gameState.replace("'", '"')
+   gameState = json.loads(gameState)
+   
    file.close()
 
    return gameState
@@ -368,4 +371,70 @@ def saveQuestionAsked(questionAsked):
 
 
 
+
+def checkPlayerPassSprint(playerPos):
+
+   gameData = loadGameState() 
+   
+   sprintState = gameData["sprintState"]
+   
+   ##the 3 first entries will be the winners of the sprints, the rest is the order by which the player finish and their final position
+   pointState = gameData["points"]
+   
+   if not sprintState[0]:
+      #checks if a player went  by the sprint1
       
+      for playerState in playerPos:
+         
+         if playerState[0] >= 22:
+            pointState.append(playerState)
+            sprintState[0] = True
+            gameData["sprintState"] = sprintState
+            gameData["points"] = pointState
+            saveGameState(gameData)
+            return True
+            
+   if not sprintState[1]:
+      
+      for playerState in playerPos:
+         
+         if playerState[0] >= 36:
+            pointState.append(playerState)
+            sprintState[1] = True
+            gameData["sprintState"] = sprintState
+            gameData["points"] = pointState
+            saveGameState(gameData)
+            return True
+         
+   if not sprintState[2]:
+      
+      for playerState in playerPos:
+         
+         if playerState[0] >= 76:
+            pointState.append(playerState)
+            sprintState[2] = True
+            gameData["sprintState"] = sprintState
+            gameData["points"] = pointState
+            saveGameState(gameData)
+            return True
+   
+   for playerState in playerPos:
+      
+      res1 = any(playerState[3] in sublist for sublist in pointState)
+      
+      if playerState[0] >= 95 and not res1:
+         pointState.append(playerState)
+         gameData["points"] = pointState
+         saveGameState(gameData)
+         return True
+      
+
+def calculateFinalScore():
+   
+   totalPoints = {}
+   
+   finalPoints = loadGameState()["points"]
+   
+
+      
+            
