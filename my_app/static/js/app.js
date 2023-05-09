@@ -376,6 +376,7 @@ function play(pos, card){
                     console.log("so far so good in play function  these are the values:");
                     console.log(pos[0]);
                     console.log(answer.lookup("NewPos").value);
+                    console.log(answer.lookup("NewCurveId").id)
                     changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
                     ;
                 },

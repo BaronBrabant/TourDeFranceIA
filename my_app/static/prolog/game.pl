@@ -78,10 +78,10 @@ isFreeNormalLane(NewPos, Lane) :- (positionLegal(NewPos, 1, n), \+(cyclist(NewPo
 
     
     
-getPositionSplit(Position):- 	(Position >= 22,
-                               	Position =< 33);
-    							(Position >= 83,
-                                Position =< 93).
+getPositionSplit(Position):- 	(Position >= 23,
+                               	Position =< 34);
+    							(Position >= 84,
+                                Position =< 94).
 
 %(in, in, in, out)
 isFreeWidthSplit(Position, NewPos, LaneIn, LaneOut):- 
@@ -118,8 +118,8 @@ isFreeWidthSplitCurve(NewPos, LaneIn, CurveId, Lane):-
                                 
 
 positionLegal(Position, Lane, CurveId) :- 
-    					Position >= 0,
-    					Position =< 104,
+    					Position >= 1,
+    					Position =< 105,
    			 			isLegalLane(Position, Lane, Width), 
     					((getPositionCurve(Position),
     					isLegalInsideCurve(Width, CurveId, Lane));
@@ -135,25 +135,25 @@ isLegalInsideCurve(Width, CurveID, Lane):-
                           (Lane =:= 2,CurveID =:= b);
     					  (Lane =:= 3,member(CurveID, [c, d])))).
 
-getPositionWidth(Position, Width):- (((Position >= 0, Position =< 7);
-                                  (Position >= 18, Position =< 35);
-                                  (Position >= 94, Position =< 104)),
+getPositionWidth(Position, Width):- (((Position >= 1, Position =< 8);
+                                  (Position >= 19, Position =< 36);
+                                  (Position >= 95, Position =< 105)),
                                   Width = 3);
-                                  ((Position >= 72, Position =< 74),
+                                  ((Position >= 73, Position =< 75),
                                   Width = 1);
-                                  (((Position >= 8, Position =< 17);
-                                  (Position >= 35, Position =< 71);
-                                  (Position >= 75, Position =< 93)),
+                                  (((Position >= 9, Position =< 18);
+                                  (Position >= 36, Position =< 72);
+                                  (Position >= 76, Position =< 94)),
                                   Width = 2).
 
-getPositionCurve(Position) :-     (Position >= 8,
-                                  Position =< 9);
-    							  (Position >= 25,
-                                  Position =< 26);
-    							  (Position >= 62,
-                                  Position =< 63);
-    							  (Position >= 88,
-                                  Position =< 89).
+getPositionCurve(Position) :-     (Position >= 9,
+                                  Position =< 10);
+    							  (Position >= 26,
+                                  Position =< 27);
+    							  (Position >= 63,
+                                  Position =< 64);
+    							  (Position >= 89,
+                                  Position =< 890).
 
 
 getLast(Team, Id) :-
