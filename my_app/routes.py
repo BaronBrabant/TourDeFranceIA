@@ -27,7 +27,7 @@ def main(increaseTurn = False):
       teams = [[] for _ in range(4)]
       deck = initiate_cards_deck()
       cards_distribution(deck, teams)
-      gameState = {"deck": deck, "teams": teams, "turn": 0, "sprints":[False, False, False], "points":[]}
+      gameState = {"deck": deck, "teams": teams, "turn": 0, "sprints":[False, False, False, False], "points":[]}
       saveGameState(gameState)
       positionEveryone = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
       savePlayerState(positionEveryone)
@@ -378,15 +378,11 @@ def saveQuestionAsked(questionAsked):
    file.write(str(questionAsked))
    file.close()
 
-
-
-
-
 def checkPlayerPassSprint(playerPos):
 
    gameData = loadGameState() 
    
-   sprintState = gameData["sprintState"]
+   sprintState = gameData["sprints"]
    
    ##the 3 first entries will be the winners of the sprints, the rest is the order by which the player finish and their final position
    pointState = gameData["points"]
@@ -404,19 +400,25 @@ def checkPlayerPassSprint(playerPos):
             saveGameState(gameData)
             return True
             
-   if not sprintState[1]:
+   if not sprintState[1] or not sprintState[2]:
       
       for playerState in playerPos:
          
          if playerState[0] >= 36:
             pointState.append(playerState)
-            sprintState[1] = True
+            if not sprintState[1]:
+               
+               sprintState[1] = True
+            else:
+               sprintState[2] = True
+               
+               
             gameData["sprintState"] = sprintState
             gameData["points"] = pointState
             saveGameState(gameData)
             return True
          
-   if not sprintState[2]:
+   if not sprintState[3]:
       
       for playerState in playerPos:
          
@@ -439,11 +441,109 @@ def checkPlayerPassSprint(playerPos):
          return True
       
 
-def calculateFinalScore():
+def calculateFinalScore(playerPos):
    
-   totalPoints = {}
+   checkPlayerPassSprint(playerPos)
+   
+   #each team has a list containing the points and the seconds
+   totalPoints = {"Belgium" : [0, 0],"Netherlands":[0, 0], "Germany":[0, 0], "Italy":[0, 0]}
    
    finalPoints = loadGameState()["points"]
+   
+   #15 because 12 players acorss the finish line and 4 players for the sprints 
+   #1 player in sprnt1, 2 in sprint2, 1 in sprint3
+   if len(finalPoints) == 16:
+      
+      #saves player by times and team
+      cyclistIndividualTime = []
+      
+      for i in range(16):
+         pointsToAdd = 0
+         secondsToRemove = 0
+         if i == 0:
+            pointsToAdd = 1
+            secondsToRemove = 1
+         elif i == 1:
+            pointsToAdd = 4
+            secondsToRemove = 3
+         elif i == 2:
+            pointsToAdd = 1
+            secondsToRemove = 1
+         elif i == 3:
+            pointsToAdd = 4
+            secondsToRemove = 2
+         else:
+            pointsToAdd = 0
+            secondsToRemove = 104 - (finalPoints.get(i)[1]-1)
+            cyclistIndividualTime = [secondsToRemove, finalPoints.get(i)[4]]
+         
+         ##11 is the points to finish - position of the player in the list and the first 4 values are the sprints results
+         pointPerFinishPosition = 11 - (i-3)
+         
+         if finalPoints.get(i)[4] == 0:
+            totalPoints["Belgium"] = [totalPoints["Belgium"][0] + pointsToAdd +pointPerFinishPosition, totalPoints["Belgium"][1] + secondsToRemove]
+         elif finalPoints.get(i)[4] == 1:
+            totalPoints["Netherlands"] = [totalPoints["Netherlands"][0] + pointsToAdd+pointPerFinishPosition, totalPoints["Netherlands"][1] + secondsToRemove]
+         elif finalPoints.get(i)[4] == 2:
+            totalPoints["Germany"] = [totalPoints["Germany"][0] + pointsToAdd+pointPerFinishPosition, totalPoints["Germany"][1] + secondsToRemove]
+         elif finalPoints.get(i)[4] == 3:
+            totalPoints["Italy"] = [totalPoints["Italy"][0] + pointsToAdd+pointPerFinishPosition, totalPoints["Italy"][1] + secondsToRemove] 
+            
+      ##So at the end of the loop we have the amount of points that the individual cyclists for for the team
+      ##and we have the amount of seconds we have to remove per team
+      ##so we take those second and remove them from the total time of the stage which is 95 so obtain the final time
+      ##and calculate the final score of the team
+      
+      listTotalSecondsPerTeam = []
+      
+      for (key, value) in totalPoints.items():
+         listTotalSecondsPerTeam.append([95 - value[1], key])
+      
+      listTotalSecSorted = sorted(listTotalSecondsPerTeam, key=lambda x: x[0])
+      
+      
+      totalPoints[listTotalSecSorted[0][1]][0] += 40
+      totalPoints[listTotalSecSorted[1][1]][0] += 15
+      totalPoints[listTotalSecSorted[2][1]][0] += 5
+      
+      #and now finally sort cyclists with the best times
+      
+      listTimeIndividSorted = sorted(cyclistIndividualTime, key=lambda x: x[0], reverse=True)
+      
+      for i in range(3):
+         pointsAdded = 0
+         
+         if i == 0:
+            pointsToAdd = 15
+         elif i == 1:
+            pointsToAdd = 10
+         elif i == 2:
+            pointsToAdd = 5
+         
+         if listTimeIndividSorted[i][1] == 0:
+            totalPoints["Belgium"][0] += pointsToAdd
+         elif listTimeIndividSorted[i][1] == 1:
+            totalPoints["Netherlands"][0] += pointsToAdd
+         elif listTimeIndividSorted[i][1] == 2:
+            totalPoints["Germany"][0] += pointsToAdd
+         elif listTimeIndividSorted[i][1] == 3:
+            totalPoints["Italy"][0] += pointsToAdd
+            
+      listTimeIndividSorted[0][0]
+      
+      totalPoints[listTotalSecSorted[0][1]][0] += 40
+      totalPoints[listTotalSecSorted[1][1]][0] += 15
+      totalPoints[listTotalSecSorted[2][1]][0] += 5
+      
+      ##print the results in terminal
+      
+      print("The final results are:")
+      for (key, value) in totalPoints.items():
+         print(key, value)
+      
+      
+      
+      
    
 
       
