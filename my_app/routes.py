@@ -17,9 +17,8 @@ tdf_routes = Blueprint('my_blueprint', __name__)
 """
 MainPage with the list of all the jokes
 """
-@tdf_routes.route('/', defaults={'increaseTurn' : False}, methods = ['GET', 'POST'])
-@tdf_routes.route('/<increaseTurn>', methods = ['GET', 'POST'])
-def main(increaseTurn = False):
+@tdf_routes.route('/', methods = ['GET', 'POST'])
+def main():
 
    
    if not os.path.exists("saveGameState.txt"):
@@ -90,9 +89,7 @@ def main(increaseTurn = False):
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()
    #print(positionEveryone)
-
-
-
+   
    positionPlayerOnMap = []
    
    #print(positions)
@@ -290,8 +287,9 @@ def checkDataChange():
 
             fileToChange.write(positionCurrent)
             fileToChange.close()
+            calculateFinalScore(positionCurrentDic)
 
-            return redirect(url_for('my_blueprint.main', increaseTurn = True))
+            return redirect(url_for('my_blueprint.main'))
 
    #this checks if questions asked to the bot have changed
    if os.path.exists("saveQuestionAsked.txt"):
@@ -322,7 +320,7 @@ def checkDataChange():
             fileToChange.write(currentQuestion)
             fileToChange.close()
 
-            return redirect(url_for('my_blueprint.main', False))
+            return redirect(url_for('my_blueprint.main'))
 
       
    return jsonify("false")
@@ -333,7 +331,6 @@ def loadRatiosFromFile():
    allRatios = []
 
    for i in range(13):
-
       file = open("./ratios/saveRatio"+str(i)+".txt", "r")
       positions = file.read()
       positions = ast.literal_eval(positions)
