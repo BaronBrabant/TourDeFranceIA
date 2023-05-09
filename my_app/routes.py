@@ -216,7 +216,7 @@ def responseProlog():
    if currentCycl in exchanges_places:
       # renew cards
       # il faut adapter les fonction dans card.py
-      game = ast.eval_literal(loadGameState())
+      game = ast.literal_eval(loadGameState())
       exchange_case(game["deck"], game["teams"], game["turn"], [game["teams"][game["turn"]][0], game["teams"][game["turn"]][1], game["teams"][game["turn"]][2]])
    
    # Chance case
