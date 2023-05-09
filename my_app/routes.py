@@ -168,7 +168,14 @@ def callProlog():
       call = requests.post('http://127.0.0.1:3000/API/play', json = info)
       print(call)
       
+      if teams[turn] == []:
+         print("Team has no more cards")
+         cards_distribution_to_a_team(deck, teams, turn,5)
+         print("Cards distributed to the team")
+      
       turn = (turn+1)%4
+
+
       saveGameState({"deck": deck, "teams": teams, "turn": turn})
       
    else:
@@ -301,6 +308,7 @@ def checkDataChange():
 
          currentQuestion = file1.read()
          lastQuestion = file2.read()
+
 
          file1.close()
          file2.close()
