@@ -1,1 +1,1 @@
-die
+C'est au joueur ayant la plus haute carte secondes de commencer

@@ -28,16 +28,18 @@ intersection([X|Xs], Ys, [X|Zs]) :-
 intersection([X|Xs], Ys, Zs) :-
     \+ member(X, Ys),
     intersection(Xs, Ys, Zs).
-liste_mot_cle([friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
+liste_mot_cle([ jeu,friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
-select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=[celui, qui, a, le, plus, de, carte];
-member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
+select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=['C\'est',au, joueur, ayant, la, plus, haute, carte, secondes, de,
+commencer];
+
 member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=[non];
-member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu,il, voulait ,depasser];
+member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
+member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, 'qu\'il', voulait ,depasser];
 member(couleur,Motcletrouve),member(maillot,Motcletrouve),Answer=[le, maillot, jaune, est, porte, par, le, coureur, qui, a, le, plus, de, carte, secondes, au, classement, general];
-member(bonjour,Motcletrouve),Answer=[bonjour, que, puis,je, faire, pour, vous, ?];
+member(bonjour,Motcletrouve),Answer=[bonjour, que, 'puis-je', faire, pour, vous, ?];
 member(friendly, Motcletrouve), Answer=[die];
 member(au,Motcletrouve), member(revoir, Motcletrouve),  Answer=[au, revoir];
 member(rien,Motcletrouve),Answer=[ok];

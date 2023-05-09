@@ -117,6 +117,8 @@ function bot(){
     var data={}
     
     var userInput = document.getElementById("question").value;
+    userInput = userInput.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    
     console.log(userInput)
     document.getElementById("tbot").innerHTML +="<p><strong>Vous : </strong>" + userInput + "</p>";
             data.query=userInput.toLowerCase().split(" ");
