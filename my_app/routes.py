@@ -46,6 +46,9 @@ def main():
    deck = gameState["deck"]
    teams = gameState["teams"]
    turn = gameState["turn"]
+   sprints = gameState["sprints"]
+   points = gameState["points"]
+   
    
    
    responseBot = " "
@@ -109,7 +112,7 @@ def main():
    teamPlayingCountry = teamCountry[turn]
 
 
-   saveGameState({"deck": deck, "teams": teams, "turn": turn})
+   saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints":sprints, "points": points})
 
    #savePlayerState(positionEveryone)
 
@@ -142,11 +145,13 @@ def callProlog():
    #Loading Game State
    gameState = loadGameState()
    gameState = gameState.replace("'", '"')
-   gameState = json.loads(gameState)
+   gameState = ast.literal_eval(gameState)
 
    deck = gameState["deck"]
    teams = gameState["teams"]
    turn = gameState["turn"] 
+   sprints = gameState["sprints"]
+   points = gameState["points"]
    
    
    
@@ -173,7 +178,7 @@ def callProlog():
       turn = (turn+1)%4
 
 
-      saveGameState({"deck": deck, "teams": teams, "turn": turn})
+      saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints": sprints, "points":points})
       
    else:
       print("Card not in the deck")
@@ -386,7 +391,9 @@ def saveQuestionAsked(questionAsked):
 
 def checkPlayerPassSprint(playerPos):
 
-   gameData = loadGameState() 
+   gameData = loadGameState()
+   gameData = ast.literal_eval(gameData)
+   print(gameData)
    
    sprintState = gameData["sprints"]
    
@@ -454,7 +461,7 @@ def calculateFinalScore(playerPos):
    #each team has a list containing the points and the seconds
    totalPoints = {"Belgium" : [0, 0],"Netherlands":[0, 0], "Germany":[0, 0], "Italy":[0, 0]}
    
-   finalPoints = loadGameState()["points"]
+   finalPoints = ast.literal_eval(loadGameState())["points"]
    
    #15 because 12 players acorss the finish line and 4 players for the sprints 
    #1 player in sprnt1, 2 in sprint2, 1 in sprint3
