@@ -324,7 +324,6 @@ def loadRatiosFromFile():
    allRatios = []
 
    for i in range(13):
-
       file = open("./ratios/saveRatio"+str(i)+".txt", "r")
       positions = file.read()
       positions = ast.literal_eval(positions)
