@@ -89,9 +89,7 @@ def main():
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()
    #print(positionEveryone)
-
-
-
+   
    positionPlayerOnMap = []
    
    #print(positions)
@@ -282,6 +280,7 @@ def checkDataChange():
 
             fileToChange.write(positionCurrent)
             fileToChange.close()
+            calculateFinalScore(positionCurrentDic)
 
             return redirect(url_for('my_blueprint.main'))
 
@@ -324,7 +323,6 @@ def loadRatiosFromFile():
    allRatios = []
 
    for i in range(13):
-
       file = open("./ratios/saveRatio"+str(i)+".txt", "r")
       positions = file.read()
       positions = ast.literal_eval(positions)
