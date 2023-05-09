@@ -28,17 +28,21 @@ intersection([X|Xs], Ys, [X|Zs]) :-
 intersection([X|Xs], Ys, Zs) :-
     \+ member(X, Ys),
     intersection(Xs, Ys, Zs).
-liste_mot_cle([case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
+liste_mot_cle([au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
 select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=[celui, qui, a, le, plus, de, carte];
 member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
-member(bonjour,Motcletrouve),Answer=[bonjour, que, puis-je, faire, pour, vous];
+member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=[non];
 member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, qu,il, voulait ,depasser];
-Answer = [je, ne, sais, pas];
+member(couleur,Motcletrouve),member(maillot,Motcletrouve),Answer=[le, maillot, jaune, est, porte, par, le, coureur, qui, a, le, plus, de, carte, secondes, au, classement, general];
+member(bonjour,Motcletrouve),Answer=[bonjour, que, puis,je, faire, pour, vous, ?];
+member(au,Motcletrouve), member(revoir, Motcletrouve),  Answer=[au, revoir];
+member(rien,Motcletrouve),Answer=[ok];
+Answer = [je, ne, sais, pas]
 %Puis-je deplacer un coureur sur une case occupee par un autre coureur ?
-member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=["Non"]
+
 ).
 
 
@@ -61,10 +65,11 @@ produire_reponse(L,Rep) :-
     call(Body), !.
 */
 
+/*
 produire_reponse(_,[S1,S2]) :-
-    S1 = " Je ne sais pas. ",
-    S2 = "Les étudiants vont m aider, vous le verrez".
-
+    S1 = [je, ne, sais, pas],
+    S2 = [les, etudiants, vont, m ,aider, vous, le, verrez].
+*/
 
 match_pattern(Pattern,Lmots) :-
     sublist(Pattern,L_mots).
