@@ -6,7 +6,7 @@ from .models import *
 import ast
 import os
 from .card import *
-import json
+import json, time
 
 
 
@@ -221,6 +221,7 @@ def responseProlog():
    
    # Chance case
    if currentCycl in chance_places:
+      time.sleep(2)
       return jsonify({"card":lucky_case(), "player":fullCycl}), 201
    
 
