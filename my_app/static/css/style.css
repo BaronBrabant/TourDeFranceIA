@@ -87,5 +87,9 @@
     border-style: solid;
     border-width: 1px;
     border-color: #090601;
+    cursor: pointer;
+    font-size: large;
+    background-color: white;
 
 }
+

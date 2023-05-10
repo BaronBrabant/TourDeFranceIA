@@ -154,3 +154,28 @@ session.query("likes(sam, X).", {
     error: function(err) {  }
 });
 */
+var selectedIndex = []
+function switchCard(cardIndex, team){
+    if (!selectedIndex.includes(cardIndex)){
+        document.getElementById(team+String((cardIndex+1))).style.backgroundColor = 'Lightgreen'
+        selectedIndex.push(cardIndex)
+    }else{
+        document.getElementById(team+String((cardIndex+1))).style.backgroundColor = 'white'
+        selectedIndex = selectedIndex.filter(function (idx) {
+            return idx !== cardIndex;
+        });
+    }
+    console.log(selectedIndex)
+
+}
+
+function renew(){
+    if (selectedIndex.length === 3){
+        jQuery.ajax({
+            type : 'POST',
+            url : "http://127.0.0.1:5000/API/renewCards",
+            data : JSON.stringify(selectedIndex),
+            contentType: "application/json; charset=utf-8",
+          });
+    }
+}

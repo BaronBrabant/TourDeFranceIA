@@ -226,7 +226,25 @@ def responseProlog():
       # renew cards
       # il faut adapter les fonction dans card.py
       game = ast.literal_eval(loadGameState())
-      exchange_case(game["deck"], game["teams"], game["turn"], [game["teams"][game["turn"]][0], game["teams"][game["turn"]][1], game["teams"][game["turn"]][2]])
+      deck = game["deck"]
+      teams = game["teams"]
+      turn = game["turn"] 
+      sprints = game["sprints"]
+      points = game["points"]
+      
+      if len(teams[turn]) <= 3:
+         time.sleep(2)
+         for card in teams[turn]:
+            teams[turn].remove(card)
+         cards_distribution_to_a_team(deck, teams, turn, 3)
+         print("Case echange: cartes changées!")
+      else:
+         print("Case échange: Equipe choisis les cartes")
+         return ('', 202)
+         
+         
+         
+         
    
    # Chance case
    if currentCycl in chance_places:
@@ -248,6 +266,12 @@ def callChatbot():
 
    saveQuestionAsked(responseBot)
 
+   return ('', 200)
+
+@tdf_routes.route('/API/renewCards', methods = ['GET', 'POST'])
+def renewCards():
+   selectedIndex = request.get_json()
+   
    return ('', 200)
 
 

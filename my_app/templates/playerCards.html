@@ -10,14 +10,18 @@
         {% for card in teams[0] %}
             
             {% if loop.index == 5 %} 
-                <span class="cardBox" onclick="playCard({{card}}, 0, 0)">{{card}}</span>
+                <span id = "B{{loop.index}}" class="cardBox" onclick="switchCard({{loop.index}}-1, 'B')">{{card}}</span>
             {% else %}
-                <span class="cardBox" onclick="playCard({{card}}, 0, 0)">{{card}}</span><span>-</span>
+                <span id = "B{{loop.index}}" class="cardBox" onclick="switchCard({{loop.index}}-1, 'B')">{{card}}</span><span>-</span>
             {% endif %}
             
         {%endfor%}
-
+        {% if teams[0]|length > 3%}
+        <br>
+        <button class = "button" onclick = "renew()">Renew selected cards</button>
+        {% endif %}
         </p>
+       
     
     </div>
 
