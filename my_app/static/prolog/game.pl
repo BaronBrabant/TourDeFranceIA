@@ -32,6 +32,28 @@ cyclist(0, 0, n, i3, 3).
 
 %movement().
 
+checkCyclistInWay(InitialPosition, NewPosition) :- 
+    			FirstStep is InitialPosition + 1,
+    			PosInbetween in FirstStep..NewPosition,
+    			indomain(PosInbetween),
+    			write(PosInbetween),
+                checkCollision(PosInbetween).
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 1,
+                            cyclist(OtherCyc, _ , _,_, _).
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 2, 
+                            cyclist(OtherCyc, _, _,ID,_ ),
+                            cyclist(OtherCyc,_ ,_,ID2,_), 
+                            ID = ID2.
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 3, 
+                            cyclist(OtherCyc, _, _,ID, _),
+                            cyclist(OtherCyc,_ ,_ ,ID2, _), ID = ID2, 
+                            cyclist(OtherCyc, _,_,ID3, _), ID = ID3, ID2=ID3.
 
 nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :- 
     NewPos is Position + Movement,
