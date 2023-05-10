@@ -1,21 +1,19 @@
 :- use_module(library(lists)).
-:- consult('gameData.pl').
-
 :- dynamic(cyclist/5).
 
 % position, lane, curveId, cyclistId, teamId
 
 cyclist(0, 0, n, b1, 0).
 cyclist(0, 0, n, b2, 0).
-cyclist(0, 0, n, b3, 0).
+cyclist(3, 0, n, b3, 0).
 
-cyclist(0, 0, n, n1, 1).
+cyclist(4, 0, n, n1, 1).
 cyclist(0, 0, n, n2, 1).
-cyclist(0, 0, n, n3, 1).
+cyclist(4, 0, n, n3, 1).
 
 cyclist(0, 0, n, g1, 2).
 cyclist(0, 0, n, g2, 2).
-cyclist(0, 0, n, g3, 2).
+cyclist(3, 0, n, g3, 2).
 
 cyclist(0, 0, n, i1, 3).
 cyclist(0, 0, n, i2, 3).
@@ -32,14 +30,60 @@ cyclist(0, 0, n, i3, 3).
 
 %movement().
 
+incremented_list(Start, End, List) :-
+    Start =< End,
+    incremented_list_helper(Start, End, List).
 
-nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :- 
+incremented_list_helper(Start, End, [Start|Rest]) :-
+    Start =< End,
+    Next is Start + 1,
+    incremented_list_helper(Next, End, Rest).
+
+incremented_list_helper(Start, End, []) :-
+    Start > End.
+
+%works for iteratePosInbetween([1,2,3,4,5], Pos).
+%iteratePosInbetween([]).
+iteratePosInbetween([Head|Tail], Return):- checkCollision(Head), 
+								   iteratePosInbetween(Tail, Return).
+iteratePosInbetween([Head|_], Return) :- Return = Head.
+
+checkCyclistInWay(InitialPosition, NewPosition, CollisionPos) :- 
+    			FirstStep is InitialPosition + 1,
+    			incremented_list(FirstStep, NewPosition, PosInBetween),
+    			append(PosInBetween, [-1], ListToCheckPos),
+                iteratePosInbetween(ListToCheckPos, CollisionPos).
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 3, 
+                            !, \+((cyclist(OtherCyc, _, _,ID, _),
+                            cyclist(OtherCyc,_ ,_ ,ID2, _), ID \= ID2, 
+                            cyclist(OtherCyc, _,_,ID3, _), ID \= ID3, ID2\=ID3)).
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 2, 
+                            !, \+((cyclist(OtherCyc, _, _,ID,_ ),
+                            cyclist(OtherCyc,_ ,_,ID2,_), 
+                            ID \= ID2)).
+
+checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
+                            Width == 1,
+                            !, \+(cyclist(OtherCyc, _ , _,_, _)).
+
+
+nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :-
+	CheckWay is Position + Movement,
+    checkCyclistInWay(Position, CheckWay, Return),
+    Return == -1,
     NewPos is Position + Movement,
     \+(getPositionSplit(NewPos)), 
     \+(getPositionCurve(NewPos)),
     isFreeNormalLane(NewPos, Lane), CurveId = n.
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
+    CheckWay is Position + Movement,
+    checkCyclistInWay(Position, CheckWay, Return),
+    Return == -1,
     NewPos is Position + Movement,
     getPositionSplit(NewPos), 
     getPositionCurve(NewPos),
@@ -49,6 +93,9 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
 
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
+    CheckWay is Position + Movement,
+    checkCyclistInWay(Position, CheckWay, Return),
+    Return == -1,
     NewPos is Position + Movement,
     getPositionSplit(NewPos), 
     \+(getPositionCurve(NewPos)),
@@ -57,6 +104,9 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
     isFreeWidthSplit(Position, NewPos, LaneIn2, Lane), CurveId = n).
 
 nextMove(Position,_,  Movement, NewPos, Lane, CurveId) :- 
+    CheckWay is Position + Movement,
+    checkCyclistInWay(Position, CheckWay, Return),
+    Return \= -1,
     NewPos is Position + Movement,
     \+(getPositionSplit(NewPos)), 
     getPositionCurve(NewPos),
@@ -173,3 +223,4 @@ doesEqWork(A, B) :- A == B.
 testOr(A, B) :- (A ; write(B)).
 
 testEmpty(A, _) :- write(A).
+

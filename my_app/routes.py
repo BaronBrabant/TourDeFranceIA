@@ -402,7 +402,6 @@ def savePlayerState(playerState):
    file.write(str(playerState))
    file.close()
 
-
 def saveGameState(gameState):
    file = open("saveGameState.txt", "w")
    file.write(str(gameState))
