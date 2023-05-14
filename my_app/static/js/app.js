@@ -24,6 +24,7 @@ app.use(cors({
 var idGlobale = "";
 var posLaneSave = [];
 var currentPlayer = "";
+var xPos ;
 
 
 const http = require('http');
@@ -307,18 +308,16 @@ app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
                     console.log("this is asnwer of the query");
                     console.log(session.format_answer(answer));
                     
+                    card = answer.lookup("ListValues").args[1].args[1].args[1].args[0].value
 
-                    console.log(answer.lookup("ListValues").args[1].args[1].args[0].value)
-                    console.log(answer.lookup("ListValues").args[1].args[0].value)
-                    if (req.body.turn == 1){
-                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args;
-                    }
-                    else if (req.body.turn == 2){
-                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args[1].args;
-                    }
-
-                    console.log(card);
-                    botPlaysCard(req.body.turn, card);
+                    var data = {};
+                    data.card = card;
+                    data.team = req.body.teamPlaying;
+                    
+                    axios.post('http://127.0.0.1:5000/API/game', {
+                        data
+                        })
+                    
                     //this is the second request
                     
                     //return idResponse;
@@ -335,7 +334,7 @@ app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
 })
 
 function botPlaysCard(team, card){//getLast(1, Id), getPosition(Id, Pos, Lane). 
-    
+
     getLast(team, card)
 
 }
@@ -425,15 +424,33 @@ function play(pos, card){
                 success: function(answer) {
                     console.log("so far so good in play function  these are the values:");
                     console.log(pos[0]);
+                    xPos = answer.lookup("NewPos").value
                     console.log(answer.lookup("NewPos").value);
                     console.log(answer.lookup("NewCurveId").id)
                     changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
                     ;
                 },
                 fail: function() {
-                    axios.post('http://127.0.0.1:5000/', {
-                        testData: 'Play returned false'
-                        })
+
+                    session.query("checkCyclistInWay("+ pos[0] +","+ xPos +", CrashPos).",{
+                        success: function(goal){
+                            session.answer({
+                                success: function(answer){
+                                    console.log(answer.lookup("CrashPos").value)
+                                    axios.post('http://127.0.0.1:5000/', {
+                                        testData: 'Play returned false'
+                                    })
+                                },
+                                fail: function(){
+                                    console.log("fail crash")
+                                },
+                                error: function(err){console.log(err)},
+                                limit: function(){}
+                            })
+                        }
+                    })                        
+                    
+                    
                 },
                 error: function(err) {console.log(err)},
                 limit: function() { }
