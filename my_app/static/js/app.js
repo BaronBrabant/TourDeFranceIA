@@ -35,44 +35,6 @@ require("tau-prolog/modules/lists.js")(pl);
 var session = pl.create(limit=150000);
 
 
-//axios.post('http://127.0.0.1:5000/', {
-//    testData: 'hello world'
-//  })
-
-
-
-
-/*
-const server = http.createServer((req, res) => {
-    
-    
-    res.statusCode = 200;
-
-    res.setHeader('Content-Type', 'text/plain');
-
-    session.consult("../prolog/test.pl", {
-            success: function() {console.log("ok") },
-            error: function(err) { console.log(err) }
-        });
-
-    session.query("likes(sam, X).", {  
-        success: function(goal) {console.log(goal)},
-        error: function(err) {  }
-    });
-    res.end('Hello World');
-
-    session.answer({
-        success: function(answer) {
-            console.log(session.format_answer(answer)); // X = salad ;
-            ;
-        },
-        fail: function() { },
-        error: function(err) {  },
-        limit: function() { }
-    });
-    
-});
-*/
 
 app.post('/API/test',jsonParser, cors(),  function(req, res) {
     //console.log(res);
@@ -175,10 +137,6 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
         error: function(err) { console.log(err) }
     }
     );
-
-
-
-
 
 
 })
