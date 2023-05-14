@@ -203,7 +203,7 @@ getPositionCurve(Position) :-     (Position >= 9,
     							  (Position >= 63,
                                   Position =< 64);
     							  (Position >= 89,
-                                  Position =< 890).
+                                  Position =< 90).
 
 
 getLast(Team, Id) :-
