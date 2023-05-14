@@ -3,7 +3,7 @@
 
 % position, lane, curveId, cyclistId, teamId
 
-cyclist(0, 0, n, b1, 0).
+cyclist(4, 0, n, b1, 0).
 cyclist(0, 0, n, b2, 0).
 cyclist(3, 0, n, b3, 0).
 
@@ -106,7 +106,7 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
 nextMove(Position,_,  Movement, NewPos, Lane, CurveId) :- 
     CheckWay is Position + Movement,
     checkCyclistInWay(Position, CheckWay, Return),
-    Return \= -1,
+    Return == -1,
     NewPos is Position + Movement,
     \+(getPositionSplit(NewPos)), 
     getPositionCurve(NewPos),
@@ -223,4 +223,46 @@ doesEqWork(A, B) :- A == B.
 testOr(A, B) :- (A ; write(B)).
 
 testEmpty(A, _) :- write(A).
+
+
+feedCard([DeckS|Deck], Return) :- 
+				
+%AllDecksFirst is a list of list containing all the decks which contain all their cards
+shallow(AllDecksFirst, Depth, Bound, Best) :-
+	
+
+shallow_child(Card, Decks, BuiltSet, Depth, Bound, Best) :-
+	length(Decks, Length),
+    Length \= 0,
+    %take first deck
+    nth0(0, Decks, PlayerDeck),
+    %Remove first deck from list 
+    drop(0, Decks, NewDecks),
+    %take first card from the selected deck
+    nth0(0, PlayerDeck, NewCard),
+    %remove card from selected deck
+    drop(0, PlayerDeck, DeckRemoveFirst),
+    %add the card to the list built as you go down the tree
+    append(BuiltSet, [DeckRemoveFirst], NewBuiltSet),
+    %call recursive function with the new card, new decks, new built set, depth, bound and best
+    Depth2 is Depth + 1,
+    shallow_child(NewCard, NewDecks, NewBuiltSet , Depth2, Bound, Best),
+    %need to finish the logic here but ill do the end condition first
+    shallow_child
+
+
+
+shallow_child(Card, Decks, BuiltSet, Depth, Bound, Best) :-
+	length(Decks, Length),
+    %this means youre at the last terminal level and need to check the values
+    Length == 0,
+    buildSetTestBetter
+
+    
+buildSetTestBetter([Card|Leftover], BuiltSet, PassedValues, Return) :-
+    append(BuiltSet, [Card], NewBuiltSet),
+    %apply eval function to all values in 
+
+
+    Return = BuiltSet.
 
