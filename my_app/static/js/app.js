@@ -1,19 +1,21 @@
-
+// permet d'importer le module axios
 const axios = require('axios');
-
+//définition de l'adresse IP et le port sur lesquels l'application web sera accessible.
 const hostname = '127.0.0.1';
 const port = 3000;
-
+//seront utilisés pour traiter les requêtes entrantes en format JSON ou x-www-form-urlencoded.
 var bodyParser = require('body-parser');
 
 var jsonParser = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+//permet d'importer le module cors
 const cors = require('cors');
-
+// importe le module Express 
 const express = require('express');
+// initialise une instance de l'application Express.
 const app = express();
-
+//permet d'utiliser le middleware CORS qui permet de gérer les requêtes cross-origin.
 app.use(cors({
     methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -26,7 +28,7 @@ var posLaneSave = [];
 var currentPlayer = "";
 var xPos ;
 
-
+//utilisé pour créer une session Prolog limitée en utilisant le module tau-prolog et les modules Node.js http et https pour effectuer des opérations réseau.
 const http = require('http');
 const https = require('https');
 
@@ -99,15 +101,20 @@ app.post('/API/test',jsonParser, cors(),  function(req, res) {
       testData: 'hello world from node code'
     })
 })
-
+/*endpoint relatif au chatbot 
+*permet la communication entre le chatbot et le serveur node
+Globalement, ce code définit un endpoint POST pour une API qui effectue des requêtes Prolog dans le fichier chatbot.pl 
+Le code est également capable d'envoyer des requêtes POST à l'URL /API/chatbot, mais cette fonctionnalité n'est pas liée à l'exécution des requêtes Prolog.
+*/
 app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
-    //var bodyInfo = JSON.parse(req.body);
+    //recuperation des données rentrés par l'utilisateur
     var body=req.body;
     console.log("tthis is the body " + body.teams);
     console.log("tthis is the body " + body.teams[0]);
+    //appel du predicat pour produire une reponse à la question de l'utilisateur
 
     const goal= `produire_reponse([${body.query}], ${body.teams}, ${body.turn},L_reponse),convert_sentence(L_reponse, Message).`;
-    
+    //consultation du fichier chat_bot.pl pour trouver la reponse à la question de l'utilisateur
     console.log(goal);
     session.consult("../prolog/chat_bot.pl",{
         success: function() {
@@ -140,6 +147,8 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
 
 
 })
+/*endpoint post qui permet de recuperer l'id du dernier coureur de 
+*l'equipe dont c'est le tour*/
 
 app.post('/API/play',jsonParser, cors(),  function(req, res) {
 
@@ -155,7 +164,7 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
     getLast(body.team, body.card);
     
 })
-
+/*endpoint pour ajouter un cycliste dans la base de connaissances des cyclistes*/
 
 app.post('/API/testAdd',jsonParser, cors(),  function(req, res) {
     //console.log(res);
@@ -188,11 +197,12 @@ app.post('/API/testAdd',jsonParser, cors(),  function(req, res) {
         error: function(err) { console.log(err) }
     });
 
-  
+  //communication avec le serveur flask
     axios.post('http://127.0.0.1:5000/', {
       testData: 'This is the add function response'
     })
 })
+/*endpoint post qui permet verifier l'ajout du cycliste*/
 
 app.post('/API/testNewAdd',jsonParser, cors(),  function(req, res) {
     //console.log(res);
@@ -234,7 +244,7 @@ app.post('/API/testNewAdd',jsonParser, cors(),  function(req, res) {
 app.listen(port, hostname, () => {
 console.log(`Server running at http://${hostname}:${port}/`);
 });
-
+/*initie le plateau de jeu*/
 app.get('/API/init',jsonParser, cors(),  function(req, res) {
 
     console.log("init function called");
@@ -247,7 +257,8 @@ app.get('/API/init',jsonParser, cors(),  function(req, res) {
         error: function(err) { console.log(err) }
     });
 })
-
+/*endpoint post qui permet la communication entre l'IA donc c'est le tour et node js
+*afin de mettre a jour l'interface de jeu */
 app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
 
     console.log("The bot is called");
@@ -329,7 +340,7 @@ function updateCyclist() {
     //nextMove(Position, _ , Movement, NewPos, Lane, CurveId)
 }
 
-
+//fonction asynchrone pour recuperer le dernier joueur d'une equipe
 async function getLast(team, card) {
     //getLast(1, Id), getPosition(Id, Pos, Lane). 
     var testLast = "getLast("+team+", Id), getPosition(Id, Position, Lane).";
@@ -365,8 +376,9 @@ async function getLast(team, card) {
 
 
     //nextMove(Position, _ , Movement, NewPos, Lane, CurveId)
-
-
+/*function pour jouer le jeu 
+*recupere le dernier joueur et renvoit sa  nouvelle position
+*sur base de la carte seconde jouée */
 function play(pos, card){
     
 
@@ -427,7 +439,7 @@ function play(pos, card){
     
 }
 
-
+//fonction alterner les equipes durant le jeu
 function changeCyclistValues(answ){
 
 
@@ -471,7 +483,7 @@ function changeCyclistValues(answ){
         error: function(err) { console.log("error query in changing of values") }
     })
 }
-
+/*function pour recuperer toutes les positions de toutes les cyclistes pour avoir l'etat du jeu*/
 function getCyclists(){
 
     var changeValues = "bagof(cyclist(A,B,C,D,E), clause(cyclist(A,B,C,D,E), _), Bag).";
