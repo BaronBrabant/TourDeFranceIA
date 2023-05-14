@@ -16,7 +16,7 @@ tdf_routes = Blueprint('my_blueprint', __name__)
 
 
 """
-MainPage with the list of all the jokes
+Main route who create the game if not initialized and place players on the board
 """
 @tdf_routes.route('/', methods = ['GET', 'POST'])
 def main():
@@ -85,6 +85,9 @@ def main():
 
    return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap, answerQuestion = saveQuestionAskedVar, responseBot = responseBot)
 
+"""
+Write in file to save ratios (for map cases)
+"""
 @tdf_routes.route('/saveRatio', methods = ['GET', 'POST'])
 def saveRatio():
 
@@ -99,6 +102,10 @@ def saveRatio():
 
    return ('', 204)
 
+
+"""
+Route that send information to the node JS server to make a move (real player or bot)
+"""
 @tdf_routes.route('/API/game/', methods = ['GET', 'POST'])
 def callProlog():
    
@@ -169,6 +176,11 @@ def callProlog():
    
    return ('', 204)
 
+
+"""
+Route that retrieves the node JS server reponse (list of all cyclists info)
+Do the necessary actions if the player who just played falls on an exchange case
+"""
 @tdf_routes.route('/API/prolog/game/response', methods = ['GET', 'POST'])
 def responseProlog():
 
@@ -229,12 +241,19 @@ def responseProlog():
    return ('', 200)
    #return redirect(url_for('my_blueprint.main'))
 
+"""
+Take a list of list, take i eme element of the list and moves it at the begining of the list
+"""
 def deplacer_ieme_element(liste, i):
     if i < 0 or i >= len(liste):
         return liste
     else:
         return liste[i:i+1] + liste[:i] + liste[i+1:]
-
+     
+     
+"""
+Contact the node JS server to ask the chatbot when a request is made
+"""
 @tdf_routes.route('/API/prolog/chatbotAsk', methods = ['GET', 'POST'])
 def askChatbot():
    info = request.get_data()
@@ -274,6 +293,11 @@ def askChatbot():
    return ('', 200)
 
 
+
+"""
+Get a response from the node JS server when a question was asked. 
+Then write the response in the saveQuestionAsked.txt
+"""
 @tdf_routes.route('/API/prolog/chatbot', methods = ['GET', 'POST'])
 def callChatbot():
 
@@ -287,12 +311,10 @@ def callChatbot():
 
    return ('', 200)
 
-@tdf_routes.route('/API/renewCards', methods = ['GET', 'POST'])
-def renewCards():
-   selectedIndex = request.get_json()
-   
-   return ('', 200)
 
+"""
+Check if the files content changed and update them if necessary
+"""
 @tdf_routes.route('/checkDataChange', methods = ['GET', 'POST'])
 def checkDataChange():
 
@@ -380,6 +402,11 @@ def checkDataChange():
       
    return jsonify("false")
 
+
+"""
+Call the node JS server to execute the Bot
+Send only 3 cards maximum due to tau prolog limitations
+"""
 def playBot():
    fileDat = loadGameState()
    fileDat = ast.literal_eval(fileDat)
@@ -432,6 +459,9 @@ def playBot():
    return("",200)
 
 
+"""
+Transform a list into a single string
+"""
 def convertToString(list1):
 
    stringToReturn = ""
@@ -441,6 +471,9 @@ def convertToString(list1):
 
    return stringToReturn
       
+"""
+Read all ratios files to be able to display players on map
+"""
 
 def loadRatiosFromFile():
    
@@ -461,6 +494,10 @@ def loadRatiosFromFile():
 
    return allRatios
 
+
+"""
+Read saveGameState.txt file
+"""
 def loadGameState():
    file = open("saveGameState.txt", "r")
    gameState = file.read()
@@ -469,6 +506,10 @@ def loadGameState():
 
    return gameState
 
+
+"""
+Read savePlayerState.txt file
+"""
 def loadPlayerState():
    fil = open("savePlayerState.txt", "r")
    positions = fil.read()
@@ -477,6 +518,10 @@ def loadPlayerState():
 
    return positions
 
+
+"""
+Read saveQuestionAsked.txt file
+"""
 def loadQuestionAsked():
    file = open("saveQuestionAsked.txt", "r")
    questionAsked = file.read()
@@ -484,21 +529,34 @@ def loadQuestionAsked():
    
    return questionAsked
 
+"""
+Write in savePlayerState.txt file
+"""
 def savePlayerState(playerState):
    file = open("savePlayerState.txt", "w")
    file.write(str(playerState))
    file.close()
 
+"""
+Write in saveGameState.txt file
+"""
 def saveGameState(gameState):
    file = open("saveGameState.txt", "w")
    file.write(str(gameState))
    file.close()
 
+
+"""
+Write in savePlayerState.txt file
+"""
 def saveQuestionAsked(questionAsked):
    file = open("saveQuestionAsked.txt", "w")
    file.write(str(questionAsked))
    file.close()
 
+"""
+Add points if player pass sprint
+"""
 def checkPlayerPassSprint(playerPos):
 
    gameData = loadGameState()
@@ -562,7 +620,11 @@ def checkPlayerPassSprint(playerPos):
          gameData["points"] = pointState
          saveGameState(gameData)
          return True
-      
+
+
+"""
+Compute the scores of the different teams
+"""    
 def calculateFinalScore(playerPos):
    
    checkPlayerPassSprint(playerPos)
