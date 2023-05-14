@@ -28,13 +28,18 @@ intersection([X|Xs], Ys, [X|Zs]) :-
 intersection([X|Xs], Ys, Zs) :-
     \+ member(X, Ys),
     intersection(Xs, Ys, Zs).
-liste_mot_cle([ jeu,friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
+liste_mot_cle([ quel, coup, meilleur,jeu,friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
-select_answer(Motcletrouve,Answer):-(member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=['C\'est',au, joueur, ayant, la, plus, haute, carte, secondes, de,
-commencer];
 
+select_answer(Motcletrouve, Teams, Turn, Answer):-(
+   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(Turn, ListValue, Value), convert_sentence(Value, ValueText), Answer=[meilleur, carte , est, la, carte, numero, ValueText];
+   select_answer(Motcletrouve,Answer)
+).
+
+select_answer(Motcletrouve,Answer):-(
+member(qui,Motcletrouve),member(commence,Motcletrouve),Answer=['C\'est',au, joueur, ayant, la, plus, haute, carte, secondes, de,commencer];
 member(deplacer,Motcletrouve),member(coureur,Motcletrouve),member(case,Motcletrouve), member(occupee,Motcletrouve), Answer=[non];
 member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe, a ,3 ,joueurs];
 member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, 'qu\'il', voulait ,depasser];
@@ -51,7 +56,7 @@ Answer = [je, ne, sais, pas]
 
 
 
-produire_reponse(L,Answer):-find_mot_cle(L,Motcletrouve),select_answer(Motcletrouve,Answer), !.
+produire_reponse(L, Teams , Turn ,Answer):-find_mot_cle(L,Motcletrouve),select_answer(Motcletrouve, Teams, Turn, Answer), !.
 
 /*
 produire_reponse([fin],L1) :-

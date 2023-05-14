@@ -138,9 +138,12 @@ app.post('/API/test',jsonParser, cors(),  function(req, res) {
 })
 
 app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
+    //var bodyInfo = JSON.parse(req.body);
     var body=req.body;
-    console.log(body);
-    const goal= `produire_reponse([${body.query}],L_reponse),convert_sentence(L_reponse, Message).`;
+    console.log("tthis is the body " + body.teams);
+    console.log("tthis is the body " + body.teams[0]);
+
+    const goal= `produire_reponse([${body.query}], [${body.teams}], [${body.turn}],L_reponse),convert_sentence(L_reponse, Message).`;
     
     console.log(goal);
     session.consult("../prolog/chat_bot.pl",{
