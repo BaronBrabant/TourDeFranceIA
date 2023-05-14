@@ -114,6 +114,7 @@ function writeResponseBot(botResponse){
 }
 
 function bot(){
+
     var data={}
     
     var userInput = document.getElementById("question").value;
@@ -123,9 +124,9 @@ function bot(){
     document.getElementById("tbot").innerHTML +="<p><strong>Vous : </strong>" + userInput + "</p>";
             data.query=userInput.toLowerCase().split(" ");
             console.log("coucou 1")
-            jQuery.ajax({   
+            jQuery.ajax({       
                 type: 'POST',
-                url: "http://127.0.0.1:3000/API/chatbot",
+                url: "/API/prolog/chatbotAsk",
                 data: JSON.stringify(data),
                 contentType: "application/json; charset=utf-8",
                 success: function(response) {

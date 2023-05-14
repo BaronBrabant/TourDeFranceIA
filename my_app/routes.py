@@ -229,6 +229,43 @@ def responseProlog():
    return ('', 200)
    #return redirect(url_for('my_blueprint.main'))
 
+def deplacer_ieme_element(liste, i):
+    if i < 0 or i >= len(liste):
+        return liste
+    else:
+        return liste[i:i+1] + liste[:i] + liste[i+1:]
+
+@tdf_routes.route('/API/prolog/chatbotAsk', methods = ['GET', 'POST'])
+def askChatbot():
+   info = request.get_data()
+   info = json.loads(info)
+
+   gameState = loadGameState()
+   gameState = gameState.replace("'", '"')
+   gameState = ast.literal_eval(gameState)
+
+   teams = gameState["teams"]
+   turn = gameState["turn"] 
+
+   teams = [[1, 4], [1, 8], [3, 11], [9, 3]]
+   
+   info["turn"] = turn
+   info["teams"] = convertToString( deplacer_ieme_element(teams, turn))
+
+   print("this is the call to the ask function in flask")
+   print(info)
+   print( info['query'])
+   
+
+
+
+   
+   
+   call = requests.post('http://127.0.0.1:3000/API/chatbot', json = info)
+
+   return ('', 200)
+
+
 @tdf_routes.route('/API/prolog/chatbot', methods = ['GET', 'POST'])
 def callChatbot():
 
