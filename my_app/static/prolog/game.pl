@@ -228,7 +228,7 @@ build_tree([[_,H|T]|Rest], Tree) :-
     build_tree([[H|T]|Rest], Tree).
 
 
-build_tree_evaluate(AllDeck, BestTrees):-
+build_tree_evaluate(AllDeck, BestTrees):- 
     findall(Tree, build_tree(AllDeck, Tree), TreesScores),
     start_eval(TreesScores, BestTrees).
 

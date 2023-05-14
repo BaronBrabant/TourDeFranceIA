@@ -7,6 +7,7 @@ import ast
 import os
 from .card import *
 import json, time
+import time
 
 
 
@@ -48,41 +49,6 @@ def main():
    points = gameState["points"]
    
    responseBot = " "
-
-   """
-   if request.method == "POST":
-
-      info = request.get_data()
-      info = json.loads(info)
-
-      try:
-         responseBot = info['testData']['id']
-         print(info['testData']['id'])
-         print(type(responseBot))
-      except KeyError:
-         print(info)
-         
-         info = ast.literal_eval(info["allCyclists"])
-         print(info)
-
-         info = sorted(info, key = lambda x: x[4])
-         
-         positionEveryone = []
-         for cyclist in info:
-            positionEveryone.append([cyclist[0], cyclist[1]])
-         
-         savePlayerState(positionEveryone)
-      
-      return redirect(url_for('my_blueprint.main'))
-  
-      f = open("saveRatioFirstLeg.txt", "w")
- 
-      listRatio = request.form["data"]
-      listRatio = json.loads(listRatio)
-      print(listRatio)
-      f.write(str(listRatio))
-      f.close()
-      """   
 
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()
@@ -132,8 +98,6 @@ def saveRatio():
 @tdf_routes.route('/API/game/', methods = ['GET', 'POST'])
 def callProlog():
    
-   
-   
    info = request.get_data()
    info = json.loads(info)
 
@@ -147,8 +111,6 @@ def callProlog():
    turn = gameState["turn"] 
    sprints = gameState["sprints"]
    points = gameState["points"]
-   
-   
    
 
    cardPlayed = info['card']
@@ -277,6 +239,7 @@ def renewCards():
 def checkDataChange():
 
    #print("this is polled")
+   
 
    #this checks if the game data (aka the position of the cyclist have changed)
    if os.path.exists("savePlayerState.txt"):
@@ -349,9 +312,55 @@ def checkDataChange():
 
             return redirect(url_for('my_blueprint.main'))
 
+   #if os.path.exists("saveGameState.txt"):
+      #this calls the function which that makes the bot play
+      #playBot()
       
    return jsonify("false")
+
+def playBot():
+
+   fileData = loadGameState()
+   fileData = ast.literal_eval(fileData)
+
+   #get cards and orgnise the order for the bot to play
+   cardsInHand = fileData["teams"]
+   cardsInHand = [[1, 2], [3, 4], [4, 5], [6, 7]]
+
+   dictData = {}
+   dictData["teamPlaying"] = fileData["turn"]
    
+
+
+   if fileData["turn"] == 1:
+      cardOrganized = cardsInHand[1:]
+      cardOrganized.append(cardsInHand[0])
+
+      dictData["teamCards"] = convertToString(cardOrganized)
+      print("it enters here")
+      print(dictData)
+
+      requests.post('http://127.0.0.1:3000/API/botPlay', json = dictData)
+   elif fileData["turn"] == 2:
+      cardOrganized2 = cardsInHand[2:]
+      cardOrganized2.append(cardsInHand[0])
+      cardOrganized2.append(cardsInHand[1])
+      dictData["teamCards"] = convertToString(cardOrganized)
+      requests.post('http://127.0.0.1:3000/API/botPlay', json = cardOrganized)
+
+   return("",)
+
+
+def convertToString(list1):
+
+   stringToReturn = ""
+
+   for i in str(list1):
+      stringToReturn += i
+
+   return stringToReturn
+      
+
 def loadRatiosFromFile():
    
    allRatios = []
