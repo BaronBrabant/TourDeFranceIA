@@ -34,7 +34,7 @@ liste_mot_cle([ quel, coup, meilleur,jeu,friendly,au ,revoir,rien,bonjour,case,d
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
 
 select_answer(Motcletrouve, Teams, Turn, Answer):-(
-   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(Turn, ListValue, Value), convert_sentence(Value, ValueText), Answer=[meilleur, carte , est, la, carte, numero, ValueText];
+   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate('[[1, 4], [1, 8], [3, 11], [9, 3]]', BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(Turn, ListValue, Value), convert_sentence(Value, ValueText), Answer=[meilleur, carte , est, la, carte, numero, ValueText];
    select_answer(Motcletrouve,Answer)
 ).
 

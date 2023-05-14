@@ -143,7 +143,7 @@ app.post('/API/chatbot',jsonParser,cors(),function(req,res) {
     console.log("tthis is the body " + body.teams);
     console.log("tthis is the body " + body.teams[0]);
 
-    const goal= `produire_reponse([${body.query}], [${body.teams}], [${body.turn}],L_reponse),convert_sentence(L_reponse, Message).`;
+    const goal= `produire_reponse([${body.query}], ${body.teams}, ${body.turn},L_reponse),convert_sentence(L_reponse, Message).`;
     
     console.log(goal);
     session.consult("../prolog/chat_bot.pl",{

@@ -231,8 +231,9 @@ def askChatbot():
    turn = gameState["turn"] 
 
    teams = [[1, 4], [1, 8], [3, 11], [9, 3]]
+   
    info["turn"] = turn
-   info["teams"] = deplacer_ieme_element(teams, turn)
+   info["teams"] = convertToString( deplacer_ieme_element(teams, turn))
 
    print("this is the call to the ask function in flask")
    print(info)
