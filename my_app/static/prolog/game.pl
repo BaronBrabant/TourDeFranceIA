@@ -231,38 +231,85 @@ feedCard([DeckS|Deck], Return) :-
 shallow(AllDecksFirst, Depth, Bound, Best) :-
 	
 
-shallow_child(Card, Decks, BuiltSet, Depth, Bound, Best) :-
-	length(Decks, Length),
-    Length \= 0,
-    %take first deck
-    nth0(0, Decks, PlayerDeck),
-    %Remove first deck from list 
-    drop(0, Decks, NewDecks),
-    %take first card from the selected deck
-    nth0(0, PlayerDeck, NewCard),
-    %remove card from selected deck
-    drop(0, PlayerDeck, DeckRemoveFirst),
-    %add the card to the list built as you go down the tree
-    append(BuiltSet, [DeckRemoveFirst], NewBuiltSet),
-    %call recursive function with the new card, new decks, new built set, depth, bound and best
-    Depth2 is Depth + 1,
-    shallow_child(NewCard, NewDecks, NewBuiltSet , Depth2, Bound, Best),
-    %need to finish the logic here but ill do the end condition first
-    shallow_child
 
 
+build_tree([], nil).
+build_tree([[H|_]|T], node(H, Children)) :-
+    build_tree(T, Children).
+build_tree([[_,H|T]|Rest], Tree) :-
+    build_tree([[H|T]|Rest], Tree).
 
-shallow_child(Card, Decks, BuiltSet, Depth, Bound, Best) :-
-	length(Decks, Length),
-    %this means youre at the last terminal level and need to check the values
-    Length == 0,
-    buildSetTestBetter
 
+build_tree_evaluate(AllDeck, BestTrees):-
+    findall(Tree, build_tree(AllDeck, Tree), TreesScores),
+    start_eval(TreesScores, BestTrees).
+
+start_eval(AllTrees, BestTrees):- length(AllTrees, L), L == 1, BestTrees = AllTrees.
+start_eval(AllTrees, BestTrees):-
+    length(AllTrees, Len),
+    eval(AllTrees, Len, ListReturn),
+    start_eval(ListReturn, BestTrees1),
+    BestTrees = BestTrees1.
+            
+
+    %drop last elem of listDeck and call start_eval with new
+    %list and ListReturn from eval.
+
+
+eval(Tree, _, List):- length(Tree, TotalLength), TotalLength == 0, List = [].
+eval(Tree, Len, ListReturn):-
+    cutListTakeRest(Tree, Len, NewTreeAnalysed, RestTree),
+    eval_pack(NewTreeAnalysed,_, Return1),
+    eval(RestTree, Len,  ListReturn1),
+    %cut because first answer is best answer
+    !, append([Return1], ListReturn1 , ListReturn).
+
+%pack of 5 nodes
+eval_pack(H, Pass, H) :-length(H, OneRemain),
+                        OneRemain == 1,
+    					nth0(0, H, LastNode0),
+                        getValues(LastNode0, ListBuilt),
+                        eval_score(ListBuilt, Result),
+                        Pass = Result.
+eval_pack([H|Tail], Pass, BestNode):-
+    %extract value from one node
+    getValues(H, ListBuilt),
+    %evaluate score from values
+    eval_score(ListBuilt, Score),
+    eval_pack(Tail, Pass1, ReturedNode),
+    %if Result > Pass reassign
+    ((Pass1 < Score,
+    Pass = Score, BestNode = H);
+    Pass = Pass1, BestNode = ReturedNode).
     
-buildSetTestBetter([Card|Leftover], BuiltSet, PassedValues, Return) :-
-    append(BuiltSet, [Card], NewBuiltSet),
-    %apply eval function to all values in 
+    
+eval_score(H, Res):-
+    	nth0(0, H, Elem1),
+    	nth0(1, H, Elem2),
+    	nth0(2, H, Elem3),
+    	nth0(3, H, Elem4),
+    	Res is Elem1 - Elem2 - Elem3 - Elem4.
+        
 
+        
+take_interval([H|_], 1, Return) :- append([H], [], Return).
+take_interval([H|T], NbElem, Return) :-
+        NbElem1 is NbElem -1,
+        take_interval(T,NbElem1, Return1),
+        append([H], Return1 , Return).
+        
+        
+getValues(node(Value, nil), ListBuilt) :- append([], [Value], ListBuilt).
+getValues(node(Value, Child), ListBuilt) :- 
+        getValues(Child, ReturnedListBuilt),
+        append(ReturnedListBuilt, [Value], ListBuilt).
 
-    Return = BuiltSet.
+cutListTakeRest(H, NbToTake, _, List):- NbToTake == 0, List = H.
+
+cutListTakeRest([H|T], NbToTake,Taken, List) :-
+    			NbToTake1 is NbToTake -1,
+    			cutListTakeRest(T, NbToTake1, Taken1, List),
+                append(Taken1, [H], Taken).
+                
+
 
