@@ -32,7 +32,7 @@ const https = require('https');
 
 const pl = require('tau-prolog');
 require("tau-prolog/modules/lists.js")(pl);
-var session = pl.create(limit=200000);
+var session = pl.create(limit=150000);
 
 
 //axios.post('http://127.0.0.1:5000/', {

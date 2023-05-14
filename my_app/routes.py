@@ -124,6 +124,7 @@ def callProlog():
    turn = gameState["turn"] 
    sprints = gameState["sprints"]
    points = gameState["points"]
+   bot = gameState["bot"]
    
    cardPlayed = info["card"]
    print(cardPlayed)
@@ -151,7 +152,7 @@ def callProlog():
       turn = (turn+1)%4
 
 
-      saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints": sprints, "points":points})
+      saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints": sprints, "points":points, "bot": bot})
       
    else:
       print("Card not in the deck")
@@ -347,7 +348,22 @@ def playBot():
 
    #get cards and orgnise the order for the bot to play
    cardsInHand = fileData["teams"]
-   cardsInHand = [[1, 2], [3, 4], [4, 5], [6, 7]]
+
+   cardsPicked = []
+   for i in range(4):
+      if len(cardsInHand[i]) <= 3:
+         cardsPicked.append(cardsInHand[i])
+      else:
+         tmpList = []
+         for j in range(3):
+            tmpList.append(cardsInHand[i][j])
+
+         cardsPicked.append(tmpList)
+
+   cardsInHand = cardsPicked
+   print(cardsInHand)
+
+   #cardsInHand = [[1, 2, 3], [3, 4, 5], [4, 5, 4], [6, 7, 2]]
 
    dictData = {}
    dictData["teamPlaying"] = fileData["turn"]
@@ -365,8 +381,8 @@ def playBot():
       cardOrganized2 = cardsInHand[2:]
       cardOrganized2.append(cardsInHand[0])
       cardOrganized2.append(cardsInHand[1])
-      dictData["teamCards"] = convertToString(cardOrganized)
-      requests.post('http://127.0.0.1:3000/API/botPlay', json = cardOrganized)
+      dictData["teamCards"] = convertToString(cardOrganized2)
+      requests.post('http://127.0.0.1:3000/API/botPlay', json = dictData)
 
    return("",200)
 

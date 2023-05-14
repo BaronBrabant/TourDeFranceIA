@@ -228,15 +228,17 @@ build_tree([[_,H|T]|Rest], Tree) :-
     build_tree([[H|T]|Rest], Tree).
 
 
-build_tree_evaluate(AllDeck, BestTrees):- 
+build_tree_evaluate(AllDeck, BestTrees):-
     findall(Tree, build_tree(AllDeck, Tree), TreesScores),
-    start_eval(TreesScores, BestTrees).
+    Depth = 4, 
+    start_eval(TreesScores, Depth, BestTrees).
 
-start_eval(AllTrees, BestTrees):- length(AllTrees, L), L == 1, BestTrees = AllTrees.
-start_eval(AllTrees, BestTrees):-
+start_eval(AllTrees,Depth, BestTrees):- length(AllTrees, L), L == 1, BestTrees = AllTrees.
+start_eval(AllTrees,Depth, BestTrees):-
     length(AllTrees, Len),
-    eval(AllTrees, Len, ListReturn),
-    start_eval(ListReturn, BestTrees1),
+    eval(AllTrees, Depth, Len, ListReturn),
+    Depth1 is Depth -1,
+    start_eval(ListReturn,Depth1, BestTrees1),
     BestTrees = BestTrees1.
             
 
@@ -244,34 +246,55 @@ start_eval(AllTrees, BestTrees):-
     %list and ListReturn from eval.
 
 
-eval(Tree, _, List):- length(Tree, TotalLength), TotalLength == 0, List = [].
-eval(Tree, Len, ListReturn):-
+eval(Tree, Depth, _, List):- length(Tree, TotalLength), TotalLength == 0, List = [].
+eval(Tree, Depth, Len, ListReturn):-
     cutListTakeRest(Tree, Len, NewTreeAnalysed, RestTree),
-    eval_pack(NewTreeAnalysed,_, Return1),
-    eval(RestTree, Len,  ListReturn1),
+    eval_pack(NewTreeAnalysed,Depth,_, Return1),
+    eval(RestTree, Depth,  Len,  ListReturn1),
     %cut because first answer is best answer
     !, append([Return1], ListReturn1 , ListReturn).
 
 %pack of 5 nodes
-eval_pack(H, Pass, H) :-length(H, OneRemain),
+eval_pack(H, Depth,  Pass, H) :-length(H, OneRemain),
                         OneRemain == 1,
     					nth0(0, H, LastNode0),
                         getValues(LastNode0, ListBuilt),
-                        eval_score(ListBuilt, Result),
+                        eval_score(ListBuilt,Depth, Result),
                         Pass = Result.
-eval_pack([H|Tail], Pass, BestNode):-
+eval_pack([H|Tail],Depth, Pass, BestNode):-
     %extract value from one node
     getValues(H, ListBuilt),
     %evaluate score from values
-    eval_score(ListBuilt, Score),
-    eval_pack(Tail, Pass1, ReturedNode),
+    eval_score(ListBuilt,Depth, Score),
+    eval_pack(Tail,Depth, Pass1, ReturedNode),
     %if Result > Pass reassign
     ((Pass1 < Score,
     Pass = Score, BestNode = H);
     Pass = Pass1, BestNode = ReturedNode).
     
     
-eval_score(H, Res):-
+eval_score(H, 4,Res):-
+    	nth0(0, H, Elem1),
+    	nth0(1, H, Elem2),
+    	nth0(2, H, Elem3),
+    	nth0(3, H, Elem4),
+    	Res is Elem4 + Elem1 - Elem2 - Elem3.
+
+eval_score(H, 3,Res):-
+    	nth0(0, H, Elem1),
+    	nth0(1, H, Elem2),
+    	nth0(2, H, Elem3),
+    	nth0(3, H, Elem4),
+    	Res is Elem3 - Elem4 - Elem1 - Elem2.
+
+eval_score(H, 2,Res):-
+    	nth0(0, H, Elem1),
+    	nth0(1, H, Elem2),
+    	nth0(2, H, Elem3),
+    	nth0(3, H, Elem4),
+    	Res is Elem2 + Elem1 - Elem4 - Elem3.
+
+eval_score(H, 1,Res):-
     	nth0(0, H, Elem1),
     	nth0(1, H, Elem2),
     	nth0(2, H, Elem3),
@@ -298,6 +321,7 @@ cutListTakeRest([H|T], NbToTake,Taken, List) :-
     			NbToTake1 is NbToTake -1,
     			cutListTakeRest(T, NbToTake1, Taken1, List),
                 append(Taken1, [H], Taken).
+                
                 
 
 
