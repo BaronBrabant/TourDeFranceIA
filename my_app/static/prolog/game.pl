@@ -73,8 +73,7 @@ checkCollision(OtherCyc) :- getPositionWidth(OtherCyc, Width),
 
 nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :-
 	CheckWay is Position + Movement,
-    checkCyclistInWay(Position, CheckWay, Return),
-    Return == -1,
+    (Movement < 0; checkCyclistInWay(Position, CheckWay, Return), Return == -1),
     NewPos is Position + Movement,
     \+(getPositionSplit(NewPos)), 
     \+(getPositionCurve(NewPos)),
@@ -82,8 +81,7 @@ nextMove(Position, _ , Movement, NewPos, Lane, CurveId) :-
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
     CheckWay is Position + Movement,
-    checkCyclistInWay(Position, CheckWay, Return),
-    Return == -1,
+    (Movement < 0; checkCyclistInWay(Position, CheckWay, Return), Return == -1 ),
     NewPos is Position + Movement,
     getPositionSplit(NewPos), 
     getPositionCurve(NewPos),
@@ -94,8 +92,7 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
 
 nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :- 
     CheckWay is Position + Movement,
-    checkCyclistInWay(Position, CheckWay, Return),
-    Return == -1,
+    (Movement < 0; checkCyclistInWay(Position, CheckWay, Return), Return == -1 ),
     NewPos is Position + Movement,
     getPositionSplit(NewPos), 
     \+(getPositionCurve(NewPos)),
@@ -105,8 +102,7 @@ nextMove(Position, LaneIn, Movement, NewPos, Lane, CurveId) :-
 
 nextMove(Position,_,  Movement, NewPos, Lane, CurveId) :- 
     CheckWay is Position + Movement,
-    checkCyclistInWay(Position, CheckWay, Return),
-    Return == -1,
+    (Movement < 0; checkCyclistInWay(Position, CheckWay, Return), Return == -1 ),
     NewPos is Position + Movement,
     \+(getPositionSplit(NewPos)), 
     getPositionCurve(NewPos),

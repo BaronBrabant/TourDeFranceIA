@@ -24,6 +24,7 @@ app.use(cors({
 var idGlobale = "";
 var posLaneSave = [];
 var currentPlayer = "";
+var xPos ;
 
 
 const http = require('http');
@@ -375,15 +376,33 @@ function play(pos, card){
                 success: function(answer) {
                     console.log("so far so good in play function  these are the values:");
                     console.log(pos[0]);
+                    xPos = answer.lookup("NewPos").value
                     console.log(answer.lookup("NewPos").value);
                     console.log(answer.lookup("NewCurveId").id)
                     changeCyclistValues([pos[0], pos[1], answer.lookup("NewPos").value, answer.lookup("NewLane").value, answer.lookup("NewCurveId").id, pos[2]]); // X = salad ;
                     ;
                 },
                 fail: function() {
-                    axios.post('http://127.0.0.1:5000/', {
-                        testData: 'Play returned false'
-                        })
+
+                    session.query("checkCyclistInWay("+ pos[0] +","+ xPos +", CrashPos).",{
+                        success: function(goal){
+                            session.answer({
+                                success: function(answer){
+                                    console.log(answer.lookup("CrashPos").value)
+                                    axios.post('http://127.0.0.1:5000/', {
+                                        testData: 'Play returned false'
+                                    })
+                                },
+                                fail: function(){
+                                    console.log("fail crash")
+                                },
+                                error: function(err){console.log(err)},
+                                limit: function(){}
+                            })
+                        }
+                    })                        
+                    
+                    
                 },
                 error: function(err) {console.log(err)},
                 limit: function() { }
