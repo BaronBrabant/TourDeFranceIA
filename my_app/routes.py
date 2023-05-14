@@ -37,8 +37,6 @@ def main():
    gameState = gameState.replace("'", '"')
    gameState = ast.literal_eval(gameState)
 
-   
-
    saveQuestionAskedVar = loadQuestionAsked()
    print(saveQuestionAskedVar)
    print("This is the answer here")
@@ -48,8 +46,6 @@ def main():
    turn = gameState["turn"]
    sprints = gameState["sprints"]
    points = gameState["points"]
-   
-   
    
    responseBot = " "
 
@@ -88,7 +84,6 @@ def main():
       f.close()
       """   
 
-
    positions = loadRatiosFromFile()
    positionEveryone = loadPlayerState()
    #print(positionEveryone)
@@ -96,7 +91,6 @@ def main():
    positionPlayerOnMap = []
    
    #print(positions)
-
 
    for positionCyc in positionEveryone:
       #print(positionCyc)
@@ -111,13 +105,11 @@ def main():
    print(turn)
    teamPlayingCountry = teamCountry[turn]
 
-
    saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints":sprints, "points": points})
 
    #savePlayerState(positionEveryone)
 
    return render_template('playerDialogBox.html', positions = positions, teams = teams, teamPlaying = turn, country = teamPlayingCountry, positionEveryone = positionEveryone, positionPlayerOnMap =positionPlayerOnMap, answerQuestion = saveQuestionAskedVar, responseBot = responseBot)
-
 
 @tdf_routes.route('/saveRatio', methods = ['GET', 'POST'])
 def saveRatio():
@@ -132,7 +124,6 @@ def saveRatio():
    f.close()
 
    return ('', 204)
-
 
 @tdf_routes.route('/API/game/', methods = ['GET', 'POST'])
 def callProlog():
@@ -274,7 +265,6 @@ def renewCards():
    
    return ('', 200)
 
-
 @tdf_routes.route('/checkDataChange', methods = ['GET', 'POST'])
 def checkDataChange():
 
@@ -354,7 +344,6 @@ def checkDataChange():
       
    return jsonify("false")
    
-
 def loadRatiosFromFile():
    
    allRatios = []
@@ -476,7 +465,6 @@ def checkPlayerPassSprint(playerPos):
          saveGameState(gameData)
          return True
       
-
 def calculateFinalScore(playerPos):
    
    checkPlayerPassSprint(playerPos)

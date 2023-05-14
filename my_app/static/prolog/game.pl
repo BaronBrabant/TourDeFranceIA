@@ -225,14 +225,6 @@ testOr(A, B) :- (A ; write(B)).
 testEmpty(A, _) :- write(A).
 
 
-feedCard([DeckS|Deck], Return) :- 
-				
-%AllDecksFirst is a list of list containing all the decks which contain all their cards
-shallow(AllDecksFirst, Depth, Bound, Best) :-
-	
-
-
-
 build_tree([], nil).
 build_tree([[H|_]|T], node(H, Children)) :-
     build_tree(T, Children).
