@@ -127,7 +127,11 @@ def callProlog():
          print("Team has no more cards")
          cards_distribution_to_a_team(deck, teams, turn,5)
          print("Cards distributed to the team")
-      
+         if len(deck) < 5:
+            print("Deck is empty")
+            deck = initiate_cards_deck()
+            print("Deck is full again")
+
       turn = (turn+1)%4
 
 
