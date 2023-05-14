@@ -20,14 +20,13 @@ MainPage with the list of all the jokes
 """
 @tdf_routes.route('/', methods = ['GET', 'POST'])
 def main():
-
    
    if not os.path.exists("saveGameState.txt"):
       deck = []
       teams = [[] for _ in range(4)]
       deck = initiate_cards_deck()
       cards_distribution(deck, teams)
-      gameState = {"deck": deck, "teams": teams, "turn": 0, "sprints":[False, False, False, False], "points":[]}
+      gameState = {"deck": deck, "teams": teams, "turn": 0, "sprints":[False, False, False, False], "points":[], "bot": False}
       saveGameState(gameState)
       positionEveryone = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
       savePlayerState(positionEveryone)
@@ -48,6 +47,11 @@ def main():
    sprints = gameState["sprints"]
    points = gameState["points"]
    
+   if turn == 1:
+      gameState["bot"] = True
+   elif turn == 2:
+      gameState["bot"] = True
+
    responseBot = " "
 
    positions = loadRatiosFromFile()
@@ -71,7 +75,7 @@ def main():
    print(turn)
    teamPlayingCountry = teamCountry[turn]
 
-   saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints":sprints, "points": points})
+   saveGameState({"deck": deck, "teams": teams, "turn": turn, "sprints":sprints, "points": points, "bot": gameState["bot"]})
 
    #savePlayerState(positionEveryone)
 
@@ -97,6 +101,15 @@ def callProlog():
    info = request.get_data()
    info = json.loads(info)
 
+   try :
+      info = info["data"]
+   except:
+      print("data from player origin")
+      
+
+   print("THIS PRINTS THE DATA SENT BY APPJS")
+   print(info)
+
    #Loading Game State
    gameState = loadGameState()
    gameState = gameState.replace("'", '"')
@@ -108,8 +121,7 @@ def callProlog():
    sprints = gameState["sprints"]
    points = gameState["points"]
    
-
-   cardPlayed = info['card']
+   cardPlayed = info["card"]
    print(cardPlayed)
    #teamPlaying = info['team']
    #print(teamPlaying)
@@ -308,13 +320,23 @@ def checkDataChange():
 
             return redirect(url_for('my_blueprint.main'))
 
-   #if os.path.exists("saveGameState.txt"):
+   if os.path.exists("saveGameState.txt"):
+      fileDat = loadGameState()
+      fileDat = ast.literal_eval(fileDat)
+      print(fileDat)
+      if fileDat["bot"]:
       #this calls the function which that makes the bot play
-      #playBot()
+         playBot()
       
    return jsonify("false")
 
 def playBot():
+   fileDat = loadGameState()
+   fileDat = ast.literal_eval(fileDat)
+   print(fileDat)
+   fileDat["bot"] = False
+   saveGameState(fileDat)
+   
 
    fileData = loadGameState()
    fileData = ast.literal_eval(fileData)
@@ -325,8 +347,6 @@ def playBot():
 
    dictData = {}
    dictData["teamPlaying"] = fileData["turn"]
-   
-
 
    if fileData["turn"] == 1:
       cardOrganized = cardsInHand[1:]
@@ -344,7 +364,7 @@ def playBot():
       dictData["teamCards"] = convertToString(cardOrganized)
       requests.post('http://127.0.0.1:3000/API/botPlay', json = cardOrganized)
 
-   return("",)
+   return("",200)
 
 
 def convertToString(list1):

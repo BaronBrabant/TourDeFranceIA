@@ -304,18 +304,16 @@ app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
                     console.log("this is asnwer of the query");
                     console.log(session.format_answer(answer));
                     
+                    card = answer.lookup("ListValues").args[1].args[1].args[1].args[0].value
 
-                    console.log(answer.lookup("ListValues").args[1].args[1].args[0].value)
-                    console.log(answer.lookup("ListValues").args[1].args[0].value)
-                    if (req.body.turn == 1){
-                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args;
-                    }
-                    else if (req.body.turn == 2){
-                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args[1].args;
-                    }
-
-                    console.log(card);
-                    botPlaysCard(req.body.turn, card);
+                    var data = {};
+                    data.card = card;
+                    data.team = req.body.teamPlaying;
+                    
+                    axios.post('http://127.0.0.1:5000/API/game', {
+                        data
+                        })
+                    
                     //this is the second request
                     
                     //return idResponse;
@@ -332,7 +330,7 @@ app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
 })
 
 function botPlaysCard(team, card){//getLast(1, Id), getPosition(Id, Pos, Lane). 
-    
+
     getLast(team, card)
 
 }
