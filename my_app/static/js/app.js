@@ -31,7 +31,7 @@ const https = require('https');
 
 const pl = require('tau-prolog');
 require("tau-prolog/modules/lists.js")(pl);
-var session = pl.create();
+var session = pl.create(limit=200000);
 
 
 //axios.post('http://127.0.0.1:5000/', {
@@ -192,9 +192,6 @@ app.post('/API/play',jsonParser, cors(),  function(req, res) {
     res.json({message: "prolog is called"});
     getLast(body.team, body.card);
     
-
-
-    
 })
 
 
@@ -289,6 +286,56 @@ app.get('/API/init',jsonParser, cors(),  function(req, res) {
     });
 })
 
+app.post('/API/botPlay',jsonParser, cors(),  function(req, res) {
+
+    console.log("The bot is called");
+    var cardsInHand = req.body.teamCards;
+    console.log("this is the cards in hand");
+    console.log(cardsInHand)
+    console.log(req.body)
+
+    var returnBest = " build_tree_evaluate("+cardsInHand+", BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues).";
+
+    session.query(returnBest, {  
+        success: function(goal) {
+            
+            session.answer({
+                success: function(answer) {
+                    console.log("this is asnwer of the query");
+                    console.log(session.format_answer(answer));
+                    
+
+                    console.log(answer.lookup("ListValues").args[1].args[1].args[0].value)
+                    console.log(answer.lookup("ListValues").args[1].args[0].value)
+                    if (req.body.turn == 1){
+                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args;
+                    }
+                    else if (req.body.turn == 2){
+                        card =  answer.lookup("ListValues").args[1].args[1].args[1].args[1].args;
+                    }
+
+                    console.log(card);
+                    botPlaysCard(req.body.turn, card);
+                    //this is the second request
+                    
+                    //return idResponse;
+                },
+                fail: function() {return console.log("this is the error false;");},
+                error: function(err) {return "error"},
+                limit: function() {console.log("fail due to limit reache") }
+            });
+
+            
+        },
+        error: function(err) { console.log("error query") }
+    });
+})
+
+function botPlaysCard(team, card){//getLast(1, Id), getPosition(Id, Pos, Lane). 
+    
+    getLast(team, card)
+
+}
 
 function updateCyclist() {
     
