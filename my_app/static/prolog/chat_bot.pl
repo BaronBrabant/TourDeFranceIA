@@ -28,13 +28,15 @@ intersection([X|Xs], Ys, [X|Zs]) :-
 intersection([X|Xs], Ys, Zs) :-
     \+ member(X, Ys),
     intersection(Xs, Ys, Zs).
-liste_mot_cle([ quel, coup, meilleur,jeu,friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
+liste_mot_cle([ how, old , you, quel, coup, meilleur,jeu,friendly,au ,revoir,rien,bonjour,case,depasser,equipe,combien,coureur,coureurs,commence,jeu,qui,compte,deplacer,occupee,autre, coureur,dessus,groupe,  coureurs,carte, secondes,conseillez,jouer,joue,italie,belgique,hollande,allemagne,maillot,couleur]).
 
 %predicat pour trouver les mots clés de la liste des mots de la question
 find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcletrouve).
 
 select_answer(Motcletrouve, Teams, Turn, Answer):-(
-   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(Turn, ListValues, Value), convert_sentence(Value, ValueText), Answer=[meilleur, carte , est, la, carte, numero, ValueText];
+    write(Teams),
+   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(3, ListValues, Value),  Answer=[la, meilleur, carte , est, la, carte, numero , Value];
+   
    select_answer(Motcletrouve,Answer)
 ).
 
@@ -45,7 +47,7 @@ member(equipe,Motcletrouve),member(combien,Motcletrouve),Answer=[chaque, equipe,
 member(dessus,Motcletrouve),member(depasser,Motcletrouve),Answer=[oui, il, est, permis, de, depasser, par ,le, bas-cote ,de, la, route, pour ,autant, que, le, coureur, arrive, sur, une ,casee, non ,occupee,., si, ce,n ,est, pas, le, cas, le, coureur, chute, et, entraine, dans, sa, chute, le, groupe, de, coureurs, 'qu\'il', voulait ,depasser];
 member(couleur,Motcletrouve),member(maillot,Motcletrouve),Answer=[le, maillot, jaune, est, porte, par, le, coureur, qui, a, le, plus, de, carte, secondes, au, classement, general];
 member(bonjour,Motcletrouve),Answer=[bonjour, que, 'puis-je', faire, pour, vous, ?];
-member(friendly, Motcletrouve), Answer=[die];
+member(how, Motcletrouve), member(old, Motcletrouve), member(you, Motcletrouve),  Answer=[young];
 member(au,Motcletrouve), member(revoir, Motcletrouve),  Answer=[au, revoir];
 member(rien,Motcletrouve),Answer=[ok];
 Answer = [je, ne, sais, pas]
