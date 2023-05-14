@@ -35,7 +35,8 @@ find_mot_cle(L,Motcletrouve):-liste_mot_cle(Motcle),intersection(L,Motcle,Motcle
 
 select_answer(Motcletrouve, Teams, Turn, Answer):-(
     write(Teams),
-   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(3, ListValues, Value),  Answer=[meilleur, carte , est, la, carte, numero, Value];
+   member(quel,Motcletrouve),member(coup,Motcletrouve), member(meilleur, Motcletrouve), build_tree_evaluate(Teams, BestScore), nth0(0, BestScore, Node), getValues(Node, ListValues),  nth0(3, ListValues, Value),  Answer=[la, meilleur, carte , est, la, carte, numero , Value];
+   
    select_answer(Motcletrouve,Answer)
 ).
 
