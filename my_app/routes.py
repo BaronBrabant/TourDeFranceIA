@@ -246,8 +246,16 @@ def askChatbot():
    teams = gameState["teams"]
    turn = gameState["turn"] 
 
-   teams = [[1, 4], [1, 8], [3, 11], [9, 3]]
-   
+   teams2 = []
+
+   for i in range(len(teams)):
+      if len(teams[i]) <= 3:
+         teams2.append(teams[i])
+      else:
+         teams2.append(teams[i][:3])
+         
+   teams = teams2
+
    info["turn"] = turn
    info["teams"] = convertToString( deplacer_ieme_element(teams, turn))
 
