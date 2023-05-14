@@ -67,8 +67,12 @@ def main():
       if positionCyc[0] == 0:
          positionPlayerOnMap.append([positions[0][0], 0.48])
       else:
-         positionPlayerOnMap.append([positions[positionCyc[0]][positionCyc[1]][0], positions[positionCyc[0]][positionCyc[1]][1]])
+         if positionCyc[2] == 'c':
+            positionPlayerOnMap.append([positions[positionCyc[0]][positionCyc[1]][0], positions[positionCyc[0]][positionCyc[1]+1][1]])
+         else: 
+            positionPlayerOnMap.append([positions[positionCyc[0]][positionCyc[1]][0], positions[positionCyc[0]][positionCyc[1]][1]])
 
+        
    print(positionPlayerOnMap)
 
    teamCountry = ["Belgium","Netherlands", "Germany", "Italy"]
