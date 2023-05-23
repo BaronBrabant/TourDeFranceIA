@@ -248,7 +248,7 @@ def deplacer_ieme_element(liste, i):
     if i < 0 or i >= len(liste):
         return liste
     else:
-        return liste[i:i+1] + liste[:i] + liste[i+1:]
+        return liste[i:] + liste[:i]
      
      
 """
